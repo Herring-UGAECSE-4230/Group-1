@@ -1,0 +1,1 @@
+print("Hello World from Group 1") #prints "Hello World from Group 1"
