@@ -14,10 +14,10 @@ GPIO.setup(4,GPIO.OUT,initial=GPIO.LOW)
 while True:
     #Turns LED on, then waits some time value
     GPIO.output(4,GPIO.HIGH)
-    sleep(0.005)
+    sleep(0.5)
 
     #Turns LED off, then waits some time value
     GPIO.output(4,GPIO.LOW)
-    sleep(0.005)
+    sleep(0.5)
 
 #Type Ctrl+C to stop progam

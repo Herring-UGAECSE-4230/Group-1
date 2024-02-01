@@ -7,8 +7,8 @@ import pigpio #method 3
 pi=pigpio.pi()
 
 #Frequency and duty cycle adjustent
-pi.set_PWM_frequency(4,12)
-pi.set_PWM_dutycycle(4,150)
+pi.set_PWM_frequency(4,1)
+pi.set_PWM_dutycycle(4,127.50)
 
 
 #Infinite Loop
