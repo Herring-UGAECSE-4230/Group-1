@@ -1,9 +1,11 @@
 .text
 .global _start
 
+
+
 _start:
 	LDR R2, =our_fixed_data
-	LDRB R0, [R2]
+	LDR R0, [R2,#8]
 	MOV R7, #1
 	SVC 0
 

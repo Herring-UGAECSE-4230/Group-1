@@ -21,6 +21,8 @@ _start:
 	MOV R1, #0x12
 	STRB R1, [R6]
 
+	LDRB  R2,[R6]
+	LDRB  R3,[R6]
 	MOV R7, #1
 	SVC 0
 
