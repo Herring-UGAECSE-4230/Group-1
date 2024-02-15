@@ -167,6 +167,44 @@ def disp_DP():
     time.sleep(0.1)
     GPIO.output(Clk, GPIO.LOW)
 
+#Displays current value
+def disp_current(current):
+    if current==1:
+        disp_1()
+    if current==2:
+        disp_2()
+    if current==3:
+        disp_3()
+    if current==4:
+        disp_4()
+    if current==5:
+        disp_5()
+    if current==6:
+        disp_6()
+    if current==7:
+        disp_7()
+    if current==8:
+        disp_8()
+    if current==9:
+        disp_9()
+    if current==0:
+        disp_0()
+    if current=='A':
+        disp_A()
+    if current=='B':
+        disp_B()
+    if current=='C':
+        disp_C()
+    if current=='D':
+        disp_D()
+    if current=='*':
+        disp_DP()
+
+def shadow_realm():
+    while True:
+        if readKeypad(6,['*',0,'#','D'])=='#':
+            break
+
 #Credit: Nathan and Lucas wrote. Dawson was not yet in group, but had his own working keypad with previous group
 #Readkeypad searches through the Y given which row, then sets the output to the list number using char
 #Returns Current Value of the keypad output
@@ -249,43 +287,15 @@ while True:
         disOFF = 0
     if readKeypad(6,['*',0,'#','D'])=='#': #Credit: Code wrote by Lucas, Tested and improved by all members
         if disOFF == 1:
-            if current==1:
-                disp_1()
-            if current==2:
-                disp_2()
-            if current==3:
-                disp_3()
-            if current==4:
-                disp_4()
-            if current==5:
-                disp_5()
-            if current==6:
-                disp_6()
-            if current==7:
-                disp_7()
-            if current==8:
-                disp_8()
-            if current==9:
-                disp_9()
-            if current==0:
-                disp_0()
-            if current=='A':
-                disp_A()
-            if current=='B':
-                disp_B()
-            if current=='C':
-                disp_C()
-            if current=='D':
-                disp_D()
-            if current=='*':
-                disp_DP()
+            disp_current(current)
             disOFF = 0
             time.sleep(0.5)
         elif disOFF == 0:
             GPIO.output([A, B, C, D, E, F, G, DP], GPIO.LOW)
             disOFF = 1
+            shadow_realm()
             time.sleep(0.5)
-    if readKeypad(6,['*',0,'#','D'])=='D':
+    if readKeypad(6,['*',0,'#','D'])=='D': 
         disp_D()
         current = 'D'
         disOFF = 0
