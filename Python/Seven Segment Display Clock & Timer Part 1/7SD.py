@@ -170,8 +170,6 @@ def readKeypad(rowNum,char):
     GPIO.output(rowNum,GPIO.LOW)
     return curVal
 disOFF = 1
-prevVal = 0
-hashcount=0
 current = 100
 while True:
     prevVal = 0
@@ -220,11 +218,7 @@ while True:
         current = 9
         disOFF = 0
     if readKeypad(13,[7,8,9,'C'])=='C':
-        GPIO.output([B, C, G, DP], GPIO.LOW)
-        GPIO.output([A, F, E, D], GPIO.HIGH)
-        GPIO.output(Clk,GPIO.HIGH)
-        time.sleep(0.1)
-        GPIO.output(Clk, GPIO.LOW)
+        disp_C()
         current = 'C'
         disOFF = 0
     if readKeypad(6,['*',0,'#','D'])=='*':
@@ -237,7 +231,6 @@ while True:
         disOFF = 0
     if readKeypad(6,['*',0,'#','D'])=='#':
         if disOFF == 1:
-            print("test")
             if current==1:
                 disp_1()
             if current==2:
