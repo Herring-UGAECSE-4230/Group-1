@@ -23,6 +23,10 @@ _start:
 
 	LDRB  R2,[R6]
 	LDRB  R3,[R6]
+
+ 	LDR R3, [R6]
+  	SUB R6, R6, #4
+   	LDR R2, [R6]
 	MOV R7, #1
 	SVC 0
 
