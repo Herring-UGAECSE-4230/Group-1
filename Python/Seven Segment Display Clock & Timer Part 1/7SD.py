@@ -17,8 +17,8 @@ GPIO.setup(27, GPIO.IN) #Y2
 GPIO.setup(17, GPIO.IN) #Y3
 GPIO.setup(4, GPIO.IN) #Y4
 
-#set DP to off
 GPIO.setup(12, GPIO.OUT, initial=GPIO.LOW)
+DP = 12
 
 GPIO.setup(11, GPIO.OUT, initial=GPIO.LOW) # CLOCK -> GPIO 11 (SPICLOCK)
 Clk = 11
@@ -46,8 +46,114 @@ G = 24
 
 #GPIO.setup(22, GPIO.OUT, initial=GPIO.LOW) # ENABLE -> GPIO 22
 
+def disp_A():
+    GPIO.output([D, DP], GPIO.LOW)
+    GPIO.output([A, B, F, G, E, C], GPIO.HIGH)
+    GPIO.output(Clk,GPIO.HIGH)
+    time.sleep(0.1)
+    GPIO.output(Clk, GPIO.LOW)
+
+def disp_B():
+    GPIO.output([A, B, DP], GPIO.LOW)
+    GPIO.output([F, G, C, D, E], GPIO.HIGH)
+    GPIO.output(Clk,GPIO.HIGH)
+    time.sleep(0.1)
+    GPIO.output(Clk, GPIO.LOW)
+
+def disp_C():
+    GPIO.output([B, C, G, DP], GPIO.LOW)
+    GPIO.output([A, F, E, D], GPIO.HIGH)
+    GPIO.output(Clk,GPIO.HIGH)
+    time.sleep(0.1)
+    GPIO.output(Clk, GPIO.LOW)
+
+def disp_D():
+    GPIO.output([A, F, DP], GPIO.LOW)
+    GPIO.output([B, G, E, D, C], GPIO.HIGH)
+    GPIO.output(Clk,GPIO.HIGH)
+    time.sleep(0.1)
+    GPIO.output(Clk, GPIO.LOW)
+
+def disp_1():
+    GPIO.output([A, D, E, F, G, DP], GPIO.LOW)
+    GPIO.output([B, C], GPIO.HIGH)
+    GPIO.output(Clk,GPIO.HIGH)
+    time.sleep(0.1)
+    GPIO.output(Clk, GPIO.LOW)
+
+def disp_2():
+    GPIO.output([C, F, DP], GPIO.LOW)
+    GPIO.output([A, B, G, E, D], GPIO.HIGH)
+    GPIO.output(Clk,GPIO.HIGH)
+    time.sleep(0.1)
+    GPIO.output(Clk, GPIO.LOW)
+
+def disp_3():
+    GPIO.output([E, F, DP], GPIO.LOW)
+    GPIO.output([A, B, G, C, D], GPIO.HIGH)
+    GPIO.output(Clk,GPIO.HIGH)
+    time.sleep(0.1)
+    GPIO.output(Clk, GPIO.LOW)
+
+def disp_4():
+    GPIO.output([A, D, E, DP], GPIO.LOW)
+    GPIO.output([F, G, B, C], GPIO.HIGH)
+    GPIO.output(Clk,GPIO.HIGH)
+    time.sleep(0.1)
+    GPIO.output(Clk, GPIO.LOW)
+
+def disp_5():
+    GPIO.output([B, E, DP], GPIO.LOW)
+    GPIO.output([A, F, G, C, D], GPIO.HIGH)
+    GPIO.output(Clk,GPIO.HIGH)
+    time.sleep(0.1)
+    GPIO.output(Clk, GPIO.LOW)
+
+def disp_6():
+    GPIO.output([B, DP], GPIO.LOW)
+    GPIO.output([A, F, G, C, D, E], GPIO.HIGH)
+    GPIO.output(Clk,GPIO.HIGH)
+    time.sleep(0.1)
+    GPIO.output(Clk, GPIO.LOW)
+
+def disp_7():
+    GPIO.output([F,E, G, D, DP], GPIO.LOW)
+    GPIO.output([A, B, C], GPIO.HIGH)
+    GPIO.output(Clk,GPIO.HIGH)
+    time.sleep(0.1)
+    GPIO.output(Clk, GPIO.LOW)
+
+def disp_8():
+    GPIO.output(DP, GPIO.LOW)
+    GPIO.output([A, F, G, B, C, D, E], GPIO.HIGH)
+    GPIO.output(Clk,GPIO.HIGH)
+    time.sleep(0.1)
+    GPIO.output(Clk, GPIO.LOW)
+
+def disp_9():
+    GPIO.output([E, DP], GPIO.LOW)
+    GPIO.output([A, F, G, B, C, D], GPIO.HIGH)
+    GPIO.output(Clk,GPIO.HIGH)
+    time.sleep(0.1)
+    GPIO.output(Clk, GPIO.LOW)
+
+def disp_0():
+    GPIO.output([G, DP], GPIO.LOW)
+    GPIO.output([A, B, C, D, E, F], GPIO.HIGH)
+    GPIO.output(Clk,GPIO.HIGH)
+    time.sleep(0.1)
+    GPIO.output(Clk, GPIO.LOW)
+
+def disp_DP():
+    GPIO.output([A, B, C, D, E, F, G], GPIO.LOW)
+    GPIO.output(DP, GPIO.HIGH)
+    GPIO.output(Clk,GPIO.HIGH)
+    time.sleep(0.1)
+    GPIO.output(Clk, GPIO.LOW)
+
 def readKeypad(rowNum,char):
-    curVal = 0
+    curVal = 100
+    #if hashcount%2==0:
     GPIO.output(rowNum,GPIO.HIGH)
     if GPIO.input(5)==1: #check Y1
         curVal=char[0]
@@ -63,107 +169,112 @@ def readKeypad(rowNum,char):
         print(curVal)
     GPIO.output(rowNum,GPIO.LOW)
     return curVal
-
-
+disOFF = 1
+prevVal = 0
+hashcount=0
+current = 100
 while True:
+    prevVal = 0
     if readKeypad(26,[1,2,3,'A'])==1:
-        GPIO.output([A, D, E, F, G], GPIO.LOW)
-        GPIO.output([B, C], GPIO.HIGH)
-        GPIO.output(Clk,GPIO.HIGH)
-        time.sleep(0.1)
-        GPIO.output(Clk, GPIO.LOW)
+        disp_1()
+        current = 1
+        disOFF = 0
     if readKeypad(26,[1,2,3,'A'])==2:
-        GPIO.output([C, F], GPIO.LOW)
-        GPIO.output([A, B, G, E, D], GPIO.HIGH)
-        GPIO.output(Clk,GPIO.HIGH)
-        time.sleep(0.1)
-        GPIO.output(Clk, GPIO.LOW)
+        disp_2()
+        current = 2
+        disOFF = 0
     if readKeypad(26,[1,2,3,'A'])==3:
-        GPIO.output([E, F], GPIO.LOW)
-        GPIO.output([A, B, G, C, D], GPIO.HIGH)
-        GPIO.output(Clk,GPIO.HIGH)
-        time.sleep(0.1)
-        GPIO.output(Clk, GPIO.LOW)
+        disp_3()
+        current = 3
+        disOFF = 0
     if readKeypad(26,[1,2,3,'A'])=='A':
-        GPIO.output([D], GPIO.LOW)
-        GPIO.output([A, B, F, G, E, C], GPIO.HIGH)
-        GPIO.output(Clk,GPIO.HIGH)
-        time.sleep(0.1)
-        GPIO.output(Clk, GPIO.LOW)
+        disp_A()
+        current = 'A'
+        disOFF = 0
     if readKeypad(19,[4,5,6,'B'])==4:
-        GPIO.output([A, D, E], GPIO.LOW)
-        GPIO.output([F, G, B, C], GPIO.HIGH)
-        GPIO.output(Clk,GPIO.HIGH)
-        time.sleep(0.1)
-        GPIO.output(Clk, GPIO.LOW)
+        disp_4()
+        current = 4
+        disOFF = 0
     if readKeypad(19,[4,5,6,'B'])==5:
-        GPIO.output([B, E], GPIO.LOW)
-        GPIO.output([A, F, G, C, D], GPIO.HIGH)
-        GPIO.output(Clk,GPIO.HIGH)
-        time.sleep(0.1)
-        GPIO.output(Clk, GPIO.LOW)
+        disp_5()
+        current = 5
+        disOFF = 0
     if readKeypad(19,[4,5,6,'B'])==6:
-        GPIO.output(B, GPIO.LOW)
-        GPIO.output([A, F, G, C, D, E], GPIO.HIGH)
-        GPIO.output(Clk,GPIO.HIGH)
-        time.sleep(0.1)
-        GPIO.output(Clk, GPIO.LOW)
+        disp_6()
+        current = 6
+        disOFF = 0
     if readKeypad(19,[4,5,6,'B'])=='B':
-        GPIO.output([A, B], GPIO.LOW)
-        GPIO.output([F, G, C, D, E], GPIO.HIGH)
-        GPIO.output(Clk,GPIO.HIGH)
-        time.sleep(0.1)
-        GPIO.output(Clk, GPIO.LOW)
+        disp_B()
+        current = 'B'
+        disOFF = 0
     if readKeypad(13,[7,8,9,'C'])==7:
-        GPIO.output([D, E, F, G], GPIO.LOW)
-        GPIO.output([A, B, C], GPIO.HIGH)
-        GPIO.output(Clk,GPIO.HIGH)
-        time.sleep(0.1)
-        GPIO.output(Clk, GPIO.LOW)
+        disp_7()
+        current = 7
+        disOFF = 0
     if readKeypad(13,[7,8,9,'C'])==8:
-        GPIO.output([A, B, C, D, E, F, G], GPIO.HIGH)
-        GPIO.output(Clk,GPIO.HIGH)
-        time.sleep(0.1)
-        GPIO.output(Clk, GPIO.LOW)
+        disp_8()
+        current = 8
+        disOFF = 0
     if readKeypad(13,[7,8,9,'C'])==9:
-        GPIO.output(E, GPIO.LOW)
-        GPIO.output([A, F, G, B, C, D], GPIO.HIGH)
-        GPIO.output(Clk,GPIO.HIGH)
-        time.sleep(0.1)
-        GPIO.output(Clk, GPIO.LOW)
+        disp_9()
+        current = 9
+        disOFF = 0
     if readKeypad(13,[7,8,9,'C'])=='C':
-        GPIO.output([B, C, G], GPIO.LOW)
+        GPIO.output([B, C, G, DP], GPIO.LOW)
         GPIO.output([A, F, E, D], GPIO.HIGH)
         GPIO.output(Clk,GPIO.HIGH)
         time.sleep(0.1)
         GPIO.output(Clk, GPIO.LOW)
+        current = 'C'
+        disOFF = 0
     if readKeypad(6,['*',0,'#','D'])=='*':
-        GPIO.output([A, B, C, D, E, F, G], GPIO.LOW)
-        #GPIO.output([], GPIO.HIGH)
-        GPIO.output(Clk,GPIO.HIGH)
-        time.sleep(0.1)
-        GPIO.output(Clk, GPIO.LOW)
+        disp_DP()
+        current = '*'
+        disOFF = 0
     if readKeypad(6,['*',0,'#','D'])==0:
-        GPIO.output(G, GPIO.LOW)
-        GPIO.output([A, B, C, D, E, F], GPIO.HIGH)
-        GPIO.output(Clk,GPIO.HIGH)
-        time.sleep(0.1)
-        GPIO.output(Clk, GPIO.LOW)
+        disp_0()
+        current = 0
+        disOFF = 0
     if readKeypad(6,['*',0,'#','D'])=='#':
-        count = 0
-        if count%2==0:
-            GPIO.output()
-            count = count + 1
-        if count%2==1:
-            GPIO.output()
-            count = count + 1
-
-        GPIO.output(Clk,GPIO.HIGH)
-        time.sleep(0.1)
-        GPIO.output(Clk, GPIO.LOW)
+        if disOFF == 1:
+            print("test")
+            if current==1:
+                disp_1()
+            if current==2:
+                disp_2()
+            if current==3:
+                disp_3()
+            if current==4:
+                disp_4()
+            if current==5:
+                disp_5()
+            if current==6:
+                disp_6()
+            if current==7:
+                disp_7()
+            if current==8:
+                disp_8()
+            if current==9:
+                disp_9()
+            if current==0:
+                disp_0()
+            if current=='A':
+                disp_A()
+            if current=='B':
+                disp_B()
+            if current=='C':
+                disp_C()
+            if current=='D':
+                disp_D()
+            if current=='*':
+                disp_DP()
+            disOFF = 0
+            time.sleep(0.5)
+        elif disOFF == 0:
+            GPIO.output([A, B, C, D, E, F, G, DP], GPIO.LOW)
+            disOFF = 1
+            time.sleep(0.5)
     if readKeypad(6,['*',0,'#','D'])=='D':
-        GPIO.output([A, F], GPIO.LOW)
-        GPIO.output([B, G, E, D, C], GPIO.HIGH)
-        GPIO.output(Clk,GPIO.HIGH)
-        time.sleep(0.1)
-        GPIO.output(Clk, GPIO.LOW)
+        disp_D()
+        current = 'D'
+        disOFF = 0
