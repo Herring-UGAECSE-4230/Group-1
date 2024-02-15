@@ -1,5 +1,5 @@
-import RPi.GPIO as GPIO
-import time
+import RPi.GPIO as GPIO #import RPi
+import time #import Time for delays
 
 #Disable warnings so they are not displayed repeatedly
 GPIO.setwarnings(False)
@@ -7,17 +7,20 @@ GPIO.setwarnings(False)
 #Reading GPIO from the GPIO number, not pin placement
 GPIO.setmode(GPIO.BCM)
 
+#Credit: All members contributed to GPIO setup
+#Sets 4 gpio outputs for the X values on the keypad
 GPIO.setup(26, GPIO.OUT) #X1
 GPIO.setup(19, GPIO.OUT) #X2
 GPIO.setup(13, GPIO.OUT) #X3
 GPIO.setup(6, GPIO.OUT) #X4
 
+#sets 4 GPIO inputs as the y values on the keypad
 GPIO.setup(5, GPIO.IN) #Y1
 GPIO.setup(27, GPIO.IN) #Y2
 GPIO.setup(17, GPIO.IN) #Y3
 GPIO.setup(4, GPIO.IN) #Y4
 
-GPIO.setup(12, GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(12, GPIO.OUT, initial=GPIO.LOW) #Decimal Point GPIO 12
 DP = 12
 
 GPIO.setup(11, GPIO.OUT, initial=GPIO.LOW) # CLOCK -> GPIO 11 (SPICLOCK)
@@ -44,8 +47,7 @@ F = 21
 GPIO.setup(24, GPIO.OUT, initial=GPIO.LOW) # DFF Pin 8 -> 7SD 10 (G) -> GPIO 24
 G = 24
 
-#GPIO.setup(22, GPIO.OUT, initial=GPIO.LOW) # ENABLE -> GPIO 22
-
+#Displays letter 'A'
 def disp_A():
     GPIO.output([D, DP], GPIO.LOW)
     GPIO.output([A, B, F, G, E, C], GPIO.HIGH)
@@ -53,6 +55,7 @@ def disp_A():
     time.sleep(0.1)
     GPIO.output(Clk, GPIO.LOW)
 
+#Displays letter 'B'
 def disp_B():
     GPIO.output([A, B, DP], GPIO.LOW)
     GPIO.output([F, G, C, D, E], GPIO.HIGH)
@@ -60,6 +63,7 @@ def disp_B():
     time.sleep(0.1)
     GPIO.output(Clk, GPIO.LOW)
 
+#Displays letter 'C'
 def disp_C():
     GPIO.output([B, C, G, DP], GPIO.LOW)
     GPIO.output([A, F, E, D], GPIO.HIGH)
@@ -67,6 +71,7 @@ def disp_C():
     time.sleep(0.1)
     GPIO.output(Clk, GPIO.LOW)
 
+#Displays letter 'D'
 def disp_D():
     GPIO.output([A, F, DP], GPIO.LOW)
     GPIO.output([B, G, E, D, C], GPIO.HIGH)
@@ -74,6 +79,7 @@ def disp_D():
     time.sleep(0.1)
     GPIO.output(Clk, GPIO.LOW)
 
+#Displays number 1
 def disp_1():
     GPIO.output([A, D, E, F, G, DP], GPIO.LOW)
     GPIO.output([B, C], GPIO.HIGH)
@@ -81,6 +87,7 @@ def disp_1():
     time.sleep(0.1)
     GPIO.output(Clk, GPIO.LOW)
 
+#Displays number 2
 def disp_2():
     GPIO.output([C, F, DP], GPIO.LOW)
     GPIO.output([A, B, G, E, D], GPIO.HIGH)
@@ -88,6 +95,7 @@ def disp_2():
     time.sleep(0.1)
     GPIO.output(Clk, GPIO.LOW)
 
+#Displays number 3
 def disp_3():
     GPIO.output([E, F, DP], GPIO.LOW)
     GPIO.output([A, B, G, C, D], GPIO.HIGH)
@@ -95,6 +103,7 @@ def disp_3():
     time.sleep(0.1)
     GPIO.output(Clk, GPIO.LOW)
 
+#Displays number 4
 def disp_4():
     GPIO.output([A, D, E, DP], GPIO.LOW)
     GPIO.output([F, G, B, C], GPIO.HIGH)
@@ -102,6 +111,7 @@ def disp_4():
     time.sleep(0.1)
     GPIO.output(Clk, GPIO.LOW)
 
+#Displays number 5
 def disp_5():
     GPIO.output([B, E, DP], GPIO.LOW)
     GPIO.output([A, F, G, C, D], GPIO.HIGH)
@@ -109,6 +119,7 @@ def disp_5():
     time.sleep(0.1)
     GPIO.output(Clk, GPIO.LOW)
 
+#Displays number 6
 def disp_6():
     GPIO.output([B, DP], GPIO.LOW)
     GPIO.output([A, F, G, C, D, E], GPIO.HIGH)
@@ -116,6 +127,7 @@ def disp_6():
     time.sleep(0.1)
     GPIO.output(Clk, GPIO.LOW)
 
+#Displays number 7
 def disp_7():
     GPIO.output([F,E, G, D, DP], GPIO.LOW)
     GPIO.output([A, B, C], GPIO.HIGH)
@@ -123,6 +135,7 @@ def disp_7():
     time.sleep(0.1)
     GPIO.output(Clk, GPIO.LOW)
 
+#Displays number 8
 def disp_8():
     GPIO.output(DP, GPIO.LOW)
     GPIO.output([A, F, G, B, C, D, E], GPIO.HIGH)
@@ -130,6 +143,7 @@ def disp_8():
     time.sleep(0.1)
     GPIO.output(Clk, GPIO.LOW)
 
+#Displays number 9
 def disp_9():
     GPIO.output([E, DP], GPIO.LOW)
     GPIO.output([A, F, G, B, C, D], GPIO.HIGH)
@@ -137,6 +151,7 @@ def disp_9():
     time.sleep(0.1)
     GPIO.output(Clk, GPIO.LOW)
 
+#Displays number 0
 def disp_0():
     GPIO.output([G, DP], GPIO.LOW)
     GPIO.output([A, B, C, D, E, F], GPIO.HIGH)
@@ -144,6 +159,7 @@ def disp_0():
     time.sleep(0.1)
     GPIO.output(Clk, GPIO.LOW)
 
+#Displays decimal point
 def disp_DP():
     GPIO.output([A, B, C, D, E, F, G], GPIO.LOW)
     GPIO.output(DP, GPIO.HIGH)
@@ -151,9 +167,11 @@ def disp_DP():
     time.sleep(0.1)
     GPIO.output(Clk, GPIO.LOW)
 
+#Credit: Nathan and Lucas wrote. Dawson was not yet in group, but had his own working keypad with previous group
+#Readkeypad searches through the Y given which row, then sets the output to the list number using char
+#Returns Current Value of the keypad output
 def readKeypad(rowNum,char):
-    curVal = 100
-    #if hashcount%2==0:
+    curVal = 100 #initial value for keypad output, cant be a number that is on the display
     GPIO.output(rowNum,GPIO.HIGH)
     if GPIO.input(5)==1: #check Y1
         curVal=char[0]
@@ -169,10 +187,10 @@ def readKeypad(rowNum,char):
         print(curVal)
     GPIO.output(rowNum,GPIO.LOW)
     return curVal
-disOFF = 1
-current = 100
+
+disOFF = 1 #1 is display off, 0 is display on. Default is display off. NOTE: this does not set it, just tracks if it is on or off
+current = 100 #Tracks what display is set to, used to reset the display to what it was set to previously for '#'
 while True:
-    prevVal = 0
     if readKeypad(26,[1,2,3,'A'])==1:
         disp_1()
         current = 1
@@ -229,7 +247,7 @@ while True:
         disp_0()
         current = 0
         disOFF = 0
-    if readKeypad(6,['*',0,'#','D'])=='#':
+    if readKeypad(6,['*',0,'#','D'])=='#': #Credit: Code wrote by Lucas, Tested and improved by all members
         if disOFF == 1:
             if current==1:
                 disp_1()
