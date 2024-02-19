@@ -7,45 +7,46 @@ GPIO.setwarnings(False)
 #Reading GPIO from the GPIO number, not pin placement
 GPIO.setmode(GPIO.BCM)
 
-#Credit: All members contributed to GPIO setup
-#Sets 4 gpio outputs for the X values on the keypad
-GPIO.setup(26, GPIO.OUT) #X1
-GPIO.setup(19, GPIO.OUT) #X2
-GPIO.setup(13, GPIO.OUT) #X3
-GPIO.setup(6, GPIO.OUT) #X4
+def init_pins():
+    #Credit: All members contributed to GPIO setup
+    #Sets 4 gpio outputs for the X values on the keypad
+    GPIO.setup(26, GPIO.OUT) #X1
+    GPIO.setup(19, GPIO.OUT) #X2
+    GPIO.setup(13, GPIO.OUT) #X3
+    GPIO.setup(6, GPIO.OUT) #X4
 
-#sets 4 GPIO inputs as the y values on the keypad
-GPIO.setup(5, GPIO.IN) #Y1
-GPIO.setup(27, GPIO.IN) #Y2
-GPIO.setup(17, GPIO.IN) #Y3
-GPIO.setup(4, GPIO.IN) #Y4
+    #sets 4 GPIO inputs as the y values on the keypad
+    GPIO.setup(5, GPIO.IN) #Y1
+    GPIO.setup(27, GPIO.IN) #Y2
+    GPIO.setup(17, GPIO.IN) #Y3
+    GPIO.setup(4, GPIO.IN) #Y4
 
-GPIO.setup(12, GPIO.OUT, initial=GPIO.LOW) #Decimal Point GPIO 12
-DP = 12
+    GPIO.setup(12, GPIO.OUT, initial=GPIO.LOW) #Decimal Point GPIO 12
+    DP = 12
 
-GPIO.setup(11, GPIO.OUT, initial=GPIO.LOW) # CLOCK -> GPIO 11 (SPICLOCK)
-Clk = 11
+    GPIO.setup(11, GPIO.OUT, initial=GPIO.LOW) # CLOCK -> GPIO 11 (SPICLOCK)
+    Clk = 11
 
-GPIO.setup(18, GPIO.OUT, initial=GPIO.LOW) # DFF Pin 1 -> 7SD 1 (E) -> GPIO 18
-E = 18
+    GPIO.setup(18, GPIO.OUT, initial=GPIO.LOW) # DFF Pin 1 -> 7SD 1 (E) -> GPIO 18
+    E = 18
 
-GPIO.setup(23, GPIO.OUT, initial=GPIO.LOW) # DFF Pin 2 -> 7SD 2 (D) -> GPIO 23 
-D = 23
+    GPIO.setup(23, GPIO.OUT, initial=GPIO.LOW) # DFF Pin 2 -> 7SD 2 (D) -> GPIO 23 
+    D = 23
 
-GPIO.setup(25, GPIO.OUT, initial=GPIO.LOW) # DFF Pin 3 -> 7SD 4 (C) -> GPIO 25
-C = 25
+    GPIO.setup(25, GPIO.OUT, initial=GPIO.LOW) # DFF Pin 3 -> 7SD 4 (C) -> GPIO 25
+    C = 25
 
-GPIO.setup(16, GPIO.OUT, initial=GPIO.LOW) # DFF Pin 5 -> 7SD 6 (B) -> GPIO 16
-B = 16
+    GPIO.setup(16, GPIO.OUT, initial=GPIO.LOW) # DFF Pin 5 -> 7SD 6 (B) -> GPIO 16
+    B = 16
 
-GPIO.setup(20, GPIO.OUT, initial=GPIO.LOW) # DFF Pin 6 -> 7SD 7 (A) -> GPIO 20
-A = 20
+    GPIO.setup(20, GPIO.OUT, initial=GPIO.LOW) # DFF Pin 6 -> 7SD 7 (A) -> GPIO 20
+    A = 20
 
-GPIO.setup(21, GPIO.OUT, initial=GPIO.LOW) # DFF Pin 7 -> 7SD 9 (F) -> GPIO 21
-F = 21
+    GPIO.setup(21, GPIO.OUT, initial=GPIO.LOW) # DFF Pin 7 -> 7SD 9 (F) -> GPIO 21
+    F = 21
 
-GPIO.setup(24, GPIO.OUT, initial=GPIO.LOW) # DFF Pin 8 -> 7SD 10 (G) -> GPIO 24
-G = 24
+    GPIO.setup(24, GPIO.OUT, initial=GPIO.LOW) # DFF Pin 8 -> 7SD 10 (G) -> GPIO 24
+    G = 24
 
 #Displays letter 'A'
 def disp_A():
@@ -226,9 +227,7 @@ def readKeypad(rowNum,char):
     GPIO.output(rowNum,GPIO.LOW)
     return curVal
 
-disOFF = 1 #1 is display off, 0 is display on. Default is display off. NOTE: this does not set it, just tracks if it is on or off
-current = 100 #Tracks what display is set to, used to reset the display to what it was set to previously for '#'
-while True:
+def single_7SD():
     if readKeypad(26,[1,2,3,'A'])==1:
         disp_1()
         current = 1
@@ -299,3 +298,9 @@ while True:
         disp_D()
         current = 'D'
         disOFF = 0
+
+init_pins()
+disOFF = 1 #1 is display off, 0 is display on. Default is display off. NOTE: this does not set it, just tracks if it is on or off
+current = 100 #Tracks what display is set to, used to reset the display to what it was set to previously for '#'
+while True:
+    single_7SD()
