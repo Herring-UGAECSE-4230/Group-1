@@ -1,0 +1,171 @@
+nnlm@raspberrypi:~ $ cd Documents/Assembly/Assembly\ Signed\ Number/
+nnlm@raspberrypi:~/Documents/Assembly/Assembly Signed Number $ cd 1_flags/
+nnlm@raspberrypi:~/Documents/Assembly/Assembly Signed Number/1_flags $ make DEBUG=1
+as -g 1_flags_ex5_13.s -o 1_flags_ex5_13.o
+ld -o 1_flags_ex5_13 1_flags_ex5_13.o
+nnlm@raspberrypi:~/Documents/Assembly/Assembly Signed Number/1_flags $ ls
+1_flags_ex5_13  1_flags_ex5_13.o  1_flags_ex5_13.s  makefile
+nnlm@raspberrypi:~/Documents/Assembly/Assembly Signed Number/1_flags $ gdb 1_flags_ex5_13 
+GNU gdb (Raspbian 10.1-1.7) 10.1.90.20210103-git
+Copyright (C) 2021 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+Type "show copying" and "show warranty" for details.
+This GDB was configured as "arm-linux-gnueabihf".
+Type "show configuration" for configuration details.
+For bug reporting instructions, please see:
+<https://www.gnu.org/software/gdb/bugs/>.
+Find the GDB manual and other documentation resources online at:
+    <http://www.gnu.org/software/gdb/documentation/>.
+
+For help, type "help".
+Type "apropos word" to search for commands related to "word"...
+Reading symbols from 1_flags_ex5_13...
+(gdb) b _start
+Breakpoint 1 at 0x10074: file 1_flags_ex5_13.s, line 32.
+(gdb) r
+Starting program: /home/nnlm/Documents/Assembly/Assembly Signed Number/1_flags/1_flags_ex5_13 
+
+Breakpoint 1, _start () at 1_flags_ex5_13.s:32
+32		ldr	r1, =data1
+(gdb) s
+33		ldr	r2, =data2
+(gdb) s
+34		ldr	r3, =result
+(gdb) s
+36		ldr 	r4, [r1]	@ r4 = ???
+(gdb) s
+37		ldr 	r5, [r2]	@ r5 = ???
+(gdb) s
+38		adds	r4, r4, r5	@ r4 = r4 + r5 = ???, or does it?
+(gdb) s
+39		str	r4, [r3]	@store result in location
+(gdb) i r
+r0             0x0                 0
+r1             0x2011c             131356
+r2             0x20120             131360
+r3             0x2013c             131388
+r4             0x8203ca9f          2181286559
+r5             0x13d49530          332698928
+r6             0x0                 0
+r7             0x0                 0
+r8             0x0                 0
+r9             0x0                 0
+r10            0x0                 0
+r11            0x0                 0
+r12            0x0                 0
+sp             0xfffef2e0          0xfffef2e0
+lr             0x0                 0
+pc             0x1008c             0x1008c <_start+24>
+cpsr           0x90000010          -1879048176
+fpscr          0x0                 0
+(gdb) s
+42		ldr	r1, =data3
+(gdb) s
+43		ldr	r2, =data4
+(gdb) s
+44		ldr	r3, =result2
+(gdb) s
+46		ldr 	r4, [r1]	@ r4 = ??
+(gdb) s
+47		ldr	r5, [r2]	@ r5 = ??
+(gdb) s
+48		adds	r4, r4, r5	@ r4 = r4 + r5 = ???, or does it?
+(gdb) s
+49		str	r4, [r3]	@store result in location
+(gdb) i r
+r0             0x0                 0
+r1             0x20124             131364
+r2             0x20128             131368
+r3             0x20140             131392
+r4             0x670fca9f          1729088159
+r5             0x12e09530          316708144
+r6             0x0                 0
+r7             0x0                 0
+r8             0x0                 0
+r9             0x0                 0
+r10            0x0                 0
+r11            0x0                 0
+r12            0x0                 0
+sp             0xfffef2e0          0xfffef2e0
+lr             0x0                 0
+pc             0x100a8             0x100a8 <_start+52>
+cpsr           0x10                16
+fpscr          0x0                 0
+(gdb) s
+52		ldr	r1, =data5
+(gdb) s
+53		ldr	r2, =data6
+(gdb) s
+54		ldr	r3, =result3
+(gdb) s
+56		ldr 	r4, [r1]	@ r4 = ??
+(gdb) s
+57		ldr 	r5, [r2]	@ r5 = ??
+(gdb) s
+58		adds	r4, r4, r5	@ r4 = r4 + r5 = ???, or does it?
+(gdb) s
+59		str	r4, [r3]	@store result in location
+(gdb) i r
+r0             0x0                 0
+r1             0x2012c             131372
+r2             0x20130             131376
+r3             0x20144             131396
+r4             0x7fffffff          2147483647
+r5             0xffffffff          4294967295
+r6             0x0                 0
+r7             0x0                 0
+r8             0x0                 0
+r9             0x0                 0
+r10            0x0                 0
+r11            0x0                 0
+r12            0x0                 0
+sp             0xfffef2e0          0xfffef2e0
+lr             0x0                 0
+pc             0x100c4             0x100c4 <_start+80>
+cpsr           0x30000010          805306384
+fpscr          0x0                 0
+(gdb) s
+62		ldr	r1, =data7
+(gdb) s
+63		ldr	r2, =data8
+(gdb) s
+64		ldr	r3, =result4
+(gdb) s
+66		ldr 	r4, [r1]	@ r4 = ??
+(gdb) s
+67		ldr 	r5, [r2]	@ r5 = ??
+(gdb) s
+68		adds	r4, r4, r5	@ r4 = r4 + r5 = ???, or does it?
+(gdb) s
+69		str	r4, [r3]	@store result in location
+(gdb) i r
+r0             0x0                 0
+r1             0x20134             131380
+r2             0x20138             131384
+r3             0x20148             131400
+r4             0xfffffff9          4294967289
+r5             0xfffffffb          4294967291
+r6             0x0                 0
+r7             0x0                 0
+r8             0x0                 0
+r9             0x0                 0
+r10            0x0                 0
+r11            0x0                 0
+r12            0x0                 0
+sp             0xfffef2e0          0xfffef2e0
+lr             0x0                 0
+pc             0x100e0             0x100e0 <_start+108>
+cpsr           0xa0000010          -1610612720
+fpscr          0x0                 0
+(gdb) s
+71		mov 	r7, #1
+(gdb) s
+72		svc 0
+(gdb) s
+[Inferior 1 (process 1199) exited normally]
+(gdb) i r
+The program has no registers now.
+(gdb) Quit
+(gdb) q

@@ -1,0 +1,178 @@
+Reading symbols from 5_match_ex5_16...
+(gdb) b _start
+Breakpoint 1 at 0x10074: file 5_match_ex5_16.s, line 14.
+(gdb) r
+Starting program: /home/nnlm/Documents/Assembly/Assembly Signed Number/5_Match/5_match_ex5_16 
+
+Breakpoint 1, _start () at 5_match_ex5_16.s:14
+14			mov	r5, #13
+(gdb) s
+15			ldr	r0, =our_data
+(gdb) s
+16			mov	r3, #9	
+(gdb) s
+begin () at 5_match_ex5_16.s:18
+18			ldrsb r1, [r0]   @ r1 = contents of loc. pointed to by r0 (sign extended)
+(gdb) s
+19			cmn	r1, r5		@ compare r1 and negative of r5
+(gdb) s
+20			beq 	found		@ branch if r1 is equal to negative of r5
+(gdb) i r
+r0             0x200ac             131244
+r1             0xd                 13
+r2             0x0                 0
+r3             0x9                 9
+r4             0x0                 0
+r5             0xd                 13
+r6             0x0                 0
+r7             0x0                 0
+r8             0x0                 0
+r9             0x0                 0
+r10            0x0                 0
+r11            0x0                 0
+r12            0x0                 0
+sp             0xfffef2d0          0xfffef2d0
+lr             0x0                 0
+pc             0x10088             0x10088 <begin+8>
+cpsr           0x10                16
+fpscr          0x0                 0
+(gdb) s
+22			adds	r0, r0, #1	@ increment pointer
+(gdb) s
+23			subs	r3, r3, #1	@ decrement counter
+(gdb) s
+24			bne	begin		@ if r3 is not zero branch begin
+(gdb) s
+18			ldrsb r1, [r0]   @ r1 = contents of loc. pointed to by r0 (sign extended)
+(gdb) s
+19			cmn	r1, r5		@ compare r1 and negative of r5
+(gdb) s
+20			beq 	found		@ branch if r1 is equal to negative of r5
+(gdb) s
+22			adds	r0, r0, #1	@ increment pointer
+(gdb) i r
+r0             0x200ad             131245
+r1             0xfffffff6          4294967286
+r2             0x0                 0
+r3             0x8                 8
+r4             0x0                 0
+r5             0xd                 13
+r6             0x0                 0
+r7             0x0                 0
+r8             0x0                 0
+r9             0x0                 0
+r10            0x0                 0
+r11            0x0                 0
+r12            0x0                 0
+sp             0xfffef2d0          0xfffef2d0
+lr             0x0                 0
+pc             0x1008c             0x1008c <begin+12>
+cpsr           0x20000010          536870928
+fpscr          0x0                 0
+(gdb) s
+23			subs	r3, r3, #1	@ decrement counter
+(gdb) s
+24			bne	begin		@ if r3 is not zero branch begin
+(gdb) s
+18			ldrsb r1, [r0]   @ r1 = contents of loc. pointed to by r0 (sign extended)
+(gdb) s
+19			cmn	r1, r5		@ compare r1 and negative of r5
+(gdb) s
+20			beq 	found		@ branch if r1 is equal to negative of r5
+(gdb) s
+found () at 5_match_ex5_16.s:27
+27	found:		b	found
+(gdb) i r
+r0             0x200ae             131246
+r1             0xfffffff3          4294967283
+r2             0x0                 0
+r3             0x7                 7
+r4             0x0                 0
+r5             0xd                 13
+r6             0x0                 0
+r7             0x0                 0
+r8             0x0                 0
+r9             0x0                 0
+r10            0x0                 0
+r11            0x0                 0
+r12            0x0                 0
+sp             0xfffef2d0          0xfffef2d0
+lr             0x0                 0
+pc             0x1009c             0x1009c <found>
+cpsr           0x60000010          1610612752
+fpscr          0x0                 0
+(gdb) s
+
+After Change
+Breakpoint 1, _start () at 5_match_ex5_16.s:14
+14			mov	r5, #13
+(gdb) s
+15			ldr	r0, =our_data
+(gdb) s
+16			mov	r3, #9	
+(gdb) s
+begin () at 5_match_ex5_16.s:18
+18			ldrsb r1, [r0]   @ r1 = contents of loc. pointed to by r0 (sign extended)
+(gdb) s
+19			cmp	r1, r5		@ compare r1 and negative of r5
+(gdb) s
+20			beq 	found		@ branch if r1 is equal to negative of r5
+(gdb) s
+found () at 5_match_ex5_16.s:27
+27	found:		b	found
+(gdb) i r
+r0             0x200ac             131244
+r1             0xd                 13
+r2             0x0                 0
+r3             0x9                 9
+r4             0x0                 0
+r5             0xd                 13
+r6             0x0                 0
+r7             0x0                 0
+r8             0x0                 0
+r9             0x0                 0
+r10            0x0                 0
+r11            0x0                 0
+r12            0x0                 0
+sp             0xfffef300          0xfffef300
+lr             0x0                 0
+pc             0x1009c             0x1009c <found>
+cpsr           0x60000010          1610612752
+fpscr          0x0                 0
+(gdb) 
+
+New Program:
+@ This program looks for the negative of a number.  It introduces the cmn instruction
+@ Deliverable 1: Explain how the program works.  Make sure you describe the pointer/counters
+@ Deliverable 2: What is the cmn instruction and how does it work?
+@ Deliverable 3: What does the program do if a match is not found?
+@ Deliverable 4: Change one instruction only so that the program finds the match of the number (not the negative of the number).  Show your program.
+
+        .data
+our_data:       .byte   +13, -10, -13, +14, -18, -9, +12, +13, -19, +16
+
+        .text
+        .global _start
+_start:
+
+                mov     r5, #13
+                ldr     r0, =our_data
+                mov     r3, #9  
+begin:
+                ldrsb r1, [r0]   @ r1 = contents of loc. pointed to by r0 (sign extended)
+                cmp     r1, r5          @ compare r1 and negative of r5
+                beq     found           @ branch if r1 is equal to negative of r5
+
+                adds    r0, r0, #1      @ increment pointer
+                subs    r3, r3, #1      @ decrement counter
+                bne     begin           @ if r3 is not zero branch begin
+
+not_found:      b       not_found
+found:          b       found
+                mov     r7, #1
+                svc     0
+
+
+
+
+
