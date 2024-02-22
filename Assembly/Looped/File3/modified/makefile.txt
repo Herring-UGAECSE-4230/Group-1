@@ -1,0 +1,22 @@
+#Program name
+
+OBJS = 3_loop_Prog4_1_ext.o
+
+DEBUG = 1
+
+ifdef DEBUG
+DEBUGFLGS = -g
+
+else
+DEBUGFLGS =
+endif
+
+# The % is a wildcard.  For below, reads as for all .s files and create a .0 file with DEBUGFLGS output
+%.o : %.s
+	as $(DEBUGFLGS) $< -o $@
+${PROG}: $(OBJS)
+	ld -o 3_loop_Prog4_1_ext $(OBJS)
+
+#cleanup
+clean: $(OBJS)
+	rm *.o 3_loop_Prog4_1_ext
