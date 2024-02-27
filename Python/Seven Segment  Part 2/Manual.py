@@ -94,11 +94,13 @@ currentDP = 100
 
 #wheel of time rules
 def wheel_of_time():
+    print("enter Wheel of time")
     global H1
     global H2
     global M1
     global M2
     global currentDP
+    print(H1,H2,M1,M2,currentDP)
     if M2 < 9:
         M2 = M2 + 1
     elif M2 == 9:
@@ -123,6 +125,7 @@ def wheel_of_time():
                 elif H2 == 2:
                     H2 = 1
                     H1 = 0
+    print("exit Wheel of time")
 
 #returns the clock GPIO based on a display input
 def setClock(num):
@@ -136,22 +139,24 @@ def setClock(num):
         return 8
     
 def tracktime():
+    print("Enter Tracktime")
     global B_Count
     while True: #this is not working but I want the display to freeze here.
-        time.sleep(60)
-        wheel_of_time()
-        disp_current()
-        if readKeypad(19,[4,5,6,'B'])=='B': #fix this!!! if clicked three times should go back to menu
-            B_Count += 1
-            print(B_Count)
-            time.sleep(0.3)
+        for n in range(1):
+            time.sleep(.5)
+            if readKeypad(19,[4,5,6,'B'])=='B': 
+                B_Count += 1
+                print(B_Count)
 
         if B_Count == 3:
             print("return to GUI")
             break
+        wheel_of_time()
+        disp_current()
 
 #returns the next display to set based on input 
 def nextDisp(num):
+    print("Enter nextDisp")
     global exit_manual
     if num==1:
         print("changed to 2")
@@ -302,6 +307,7 @@ def flash(disp_Num):
 
 #Displays current value
 def disp_current():  #took out currentDP
+    print("disp_current")
     global currentDP
     global H1
     global H2
@@ -423,15 +429,21 @@ def shadow_realm():
             time.sleep(0.5)
             break
 
-def verify(curVal, disp_Num, H1):
+def verify(disp_Num, curVal, H1):
+    print("curval", curVal)
+    print("disp num", disp_Num)
+    print("h1", H1)
+    print("verify")
     if disp_Num == 1:
         if curVal == 0 or curVal==1:
             return True
         else: # curVal == (2 or 3 or 4 or 5 or 6 or 7 or 8 or 9):
+            print("bad number")
             return False
     if disp_Num == 2:
         if H1 == 0:
             if curVal == 0:
+                print("bad number")
                 return False
             else:
                 return True
@@ -439,11 +451,13 @@ def verify(curVal, disp_Num, H1):
             if curVal == 0 or curVal == 1 or curVal == 2:
                 return True
             else: # curVal == 3 or 4 or 5 or 6 or 7 or 8 or 9:
+                print("bad number")
                 return False
     if disp_Num == 3:
         if curVal == 0 or curVal == 1 or curVal == 2 or curVal == 3 or curVal == 4 or curVal == 5:
             return True
         else: # curVal == 6 or 7 or 8 or 9:
+            print("bad number")
             return False
 
 #Credit: Nathan and Lucas wrote. Dawson was not yet in group, but had his own working keypad with previous group
@@ -469,19 +483,21 @@ def readKeypad(rowNum,char):
 
 
 def setCurrent(num, disp_Num):
+    print("setcurrent")
     global currentDP
     global H1
     global H2
     global M1
     global M2
+    print(disp_Num)
    
-    if disp_Num==2:
+    if disp_Num==1:
         H1 = num
-    elif disp_Num==3:
+    elif disp_Num==2:
         H2 = num
-    elif disp_Num==4:
+    elif disp_Num==3:
         M1 = num
-    elif disp_Num==1:
+    elif disp_Num==4:
         M2 = num
 
 def single_7SD(disp_Num):
@@ -497,22 +513,22 @@ def single_7SD(disp_Num):
                 disp_C()
             else:
                 if disp_1(disp_Num) == 1:
-                    disp_Num = nextDisp(disp_Num)
-                setCurrent(1, disp_Num)
+                    setCurrent(1, disp_Num)
+                    disp_Num = nextDisp(disp_Num)                  
         if readKeypad(26,[1,2,3,'A'])==2:
             if verify(disp_Num,2,H1) == False:
                 disp_C()
             else:
                 if disp_2(disp_Num) == 2:
+                    setCurrent(2, disp_Num)
                     disp_Num = nextDisp(disp_Num)
-                setCurrent(2, disp_Num)
         if readKeypad(26,[1,2,3,'A'])==3:
             if verify(disp_Num,3,H1) == False:
                 disp_C()
             else:
                 if disp_3(disp_Num) == 3:
+                    setCurrent(3, disp_Num)
                     disp_Num = nextDisp(disp_Num)
-                setCurrent(3, disp_Num)
         if readKeypad(26,[1,2,3,'A'])=='A':
             disp_A()
         if readKeypad(19,[4,5,6,'B'])==4:
@@ -520,46 +536,47 @@ def single_7SD(disp_Num):
                 disp_C()
             else:
                 if disp_4(disp_Num) == 4:
+                    setCurrent(4, disp_Num)
                     disp_Num = nextDisp(disp_Num)
-                setCurrent(4, disp_Num)
         if readKeypad(19,[4,5,6,'B'])==5:
             if verify(disp_Num,5,H1) == False:
                 disp_C()
             else:
                 if disp_5(disp_Num) == 5:
+                    setCurrent(5, disp_Num)
                     disp_Num = nextDisp(disp_Num)
-                setCurrent(5, disp_Num)
-            setCurrent(5, disp_Num)
         if readKeypad(19,[4,5,6,'B'])==6:
             if verify(disp_Num,6,H1) == False:
                 disp_C()
             else:
                 if disp_6(disp_Num) == 6:
+                    setCurrent(6, disp_Num)
                     disp_Num = nextDisp(disp_Num)
-                setCurrent(6, disp_Num)
         if readKeypad(19,[4,5,6,'B'])=='B':
             disp_B()
         if readKeypad(13,[7,8,9,'C'])==7:
             if verify(disp_Num,7,H1) == False:
                 disp_C()
+                print("bad number reognized")
             else:
+                print("number passed verification")
                 if disp_7(disp_Num) == 7:
+                    setCurrent(7, disp_Num)
                     disp_Num = nextDisp(disp_Num)
-                setCurrent(7, disp_Num)
         if readKeypad(13,[7,8,9,'C'])==8:
             if verify(disp_Num,8,H1) == False:
                 disp_C()
             else:
                 if disp_8(disp_Num) == 8:
+                    setCurrent(8, disp_Num)
                     disp_Num = nextDisp(disp_Num)
-                setCurrent(8, disp_Num)
         if readKeypad(13,[7,8,9,'C'])==9:
             if verify(disp_Num,9,H1) == False:
                 disp_C()
             else:
                 if disp_9(disp_Num) == 9:
+                    setCurrent(9, disp_Num)
                     disp_Num = nextDisp(disp_Num)
-                setCurrent(9, disp_Num)
         if readKeypad(13,[7,8,9,'C'])=='C':
             disp_C()
         if readKeypad(6,['*',0,'#','D'])=='*':
@@ -575,8 +592,8 @@ def single_7SD(disp_Num):
                 disp_C()
             else:
                 if disp_0(disp_Num) == 0:
+                    setCurrent(0, disp_Num)
                     disp_Num = nextDisp(disp_Num)
-                setCurrent(0, disp_Num)
         if readKeypad(6,['*',0,'#','D'])=='#': #Credit: Code wrote by Lucas, Tested and improved by all members
             
             shadow_realm()
@@ -600,5 +617,6 @@ init_pins()
 
 while True:
     single_7SD(disp_Num)
+    
     break
    
