@@ -69,7 +69,7 @@ def disp_H1(hr):
         GPIO.output(Clk1,GPIO.HIGH)
         time.sleep(0.1)
         GPIO.output(Clk1, GPIO.LOW)
-    
+#displays H2
 def disp_H2(min1, AM_PM):
     if AM_PM == True:
         GPIO.output(12, GPIO.HIGH)
@@ -135,7 +135,7 @@ def disp_H2(min1, AM_PM):
         GPIO.output(Clk2,GPIO.HIGH)
         time.sleep(0.1)
         GPIO.output(Clk2, GPIO.LOW)
-
+#displays M1
 def disp_M1(min1):
     if min1==0:
         GPIO.output(G, GPIO.LOW)
@@ -196,7 +196,7 @@ def disp_M1(min1):
         GPIO.output(Clk3,GPIO.HIGH)
         time.sleep(0.1)
         GPIO.output(Clk3, GPIO.LOW)
-
+#displays M2
 def disp_M2(min1):
     if min1==0:
         GPIO.output(G, GPIO.LOW)

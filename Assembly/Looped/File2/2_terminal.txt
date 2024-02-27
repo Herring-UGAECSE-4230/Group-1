@@ -1,0 +1,19 @@
+r0             0x60                96
+r1             0x60                96
+r2             0x200c0             131264
+r3             0x4b                75
+r4             0x0                 0
+r5             0x0                 0
+r6             0x0                 0
+r7             0x0                 0
+r8             0x0                 0
+r9             0x0                 0
+r10            0x0                 0
+r11            0x0                 0
+r12            0x0                 0
+sp             0xfffef2f0          0xfffef2f0
+lr             0x0                 0
+pc             0x100a0             0x100a0 <ctnu+16>
+cpsr           0x60000010          1610612752
+fpscr          0x0                 0
+(gdb) 

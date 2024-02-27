@@ -1,6 +1,6 @@
-#Program name
+2_loop_Prog4_1#Program name
 
-OBJS = 3_loop_Prog4_1.o
+OBJS = 2_loop_Prog4_1.o
 
 DEBUG = 1
 
@@ -15,8 +15,8 @@ endif
 %.o : %.s
 	as $(DEBUGFLGS) $< -o $@
 ${PROG}: $(OBJS)
-	ld -o 3_loop_Prog4_1 $(OBJS)
+	ld -o 2_loop_Prog4_1 $(OBJS)
 
 #cleanup
 clean: $(OBJS)
-	rm *.o 3_loop_Prog4_1
+	rm *.o 2_loop_Prog4_1

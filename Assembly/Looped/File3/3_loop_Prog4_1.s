@@ -29,6 +29,6 @@ again:
 	add	pointer, pointer, #4	@ pointer = pointer  +  4 to point to next 
 	subs	count, count, #1	@ decrement counter
 	bne	again			@ branch again if counter is not zero
-
+stop:
 	mov	r7, #1
 	svc	0

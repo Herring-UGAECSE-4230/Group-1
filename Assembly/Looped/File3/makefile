@@ -1,6 +1,6 @@
 #Program name
 
-OBJS = 2_loop_Prog4_1.o
+OBJS = 3_loop_Prog4_1.o
 
 DEBUG = 1
 
@@ -14,9 +14,9 @@ endif
 # The % is a wildcard.  For below, reads as for all .s files and create a .0 file with DEBUGFLGS output
 %.o : %.s
 	as $(DEBUGFLGS) $< -o $@
-${PROG}: $(OBJS)
-	ld -o 2_loop_Prog4_1 $(OBJS)
+3_loop_Prog4_1: $(OBJS)
+	ld -o 3_loop_Prog4_1 $(OBJS)
 
 #cleanup
 clean: $(OBJS)
-	rm *.o 2_loop_Prog4_1
+	rm *.o 3_loop_Prog4_1
