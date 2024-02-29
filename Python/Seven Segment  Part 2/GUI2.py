@@ -1,7 +1,12 @@
+#Credit: GUI: Dawson and Lucas
+#Auto: Lucas
+#Manual: All
+
 import RPi.GPIO as GPIO
 from datetime import datetime
 import time
 from Auto import runAuto
+from Manual import runManual
 
 #Disable warnings so they are not displayed repeatedly
 GPIO.setwarnings(False)
@@ -38,6 +43,8 @@ def init_pins():
     GPIO.setup(9, GPIO.OUT, initial=GPIO.LOW) # Clock 2 (H2)
     GPIO.setup(10, GPIO.OUT, initial=GPIO.LOW) #Clock 3 (M1)
     GPIO.setup(8, GPIO.OUT, initial=GPIO.LOW) #Clock 4 (M2)
+    GPIO.setup(7, GPIO.OUT, initial=GPIO.LOW) #invalid LED
+
 
     GPIO.setup(26, GPIO.OUT) #X1
     GPIO.setup(19, GPIO.OUT) #X2
@@ -84,20 +91,23 @@ def readKeypad(rowNum,char):
         GPIO.output(rowNum,GPIO.LOW)
         return curVal
 
-def disp_0():
-    GPIO.output(G, GPIO.LOW)
-    GPIO.output([A, B, C, D, E, F], GPIO.HIGH)
+def disp_0(): #displays 0 on every 7SD
+    global Clk3
+    GPIO.output([G,12, 7], GPIO.LOW)
+    GPIO.output([A, B, C, D,E,F], GPIO.HIGH)
     GPIO.output([Clk1,Clk2,Clk3,Clk4],GPIO.HIGH)
     time.sleep(0.1)
     GPIO.output([Clk1,Clk2,Clk3,Clk4], GPIO.LOW)
 
+
 init_pins()
-while True:
-    disp_0()
+while True: #infinite loop
+    disp_0() #start screen
 
     if readKeypad(26,[1,2,3,'A'])=='A':
-        runAuto(0)
+        runAuto(0) #enter automatic mode
+        time.sleep(1)
 
     if readKeypad(19,[4,5,6,'B'])=='B':
-        #runManual()
-        print()
+        runManual() #enter manual mode
+        time.sleep(1)

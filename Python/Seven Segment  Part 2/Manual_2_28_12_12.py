@@ -79,38 +79,41 @@ def init_pins():
 #Code Above is repeated in GUI2
 #-------------------------------------------------------------------------------------
 #Code Below will be part of runManual() function
+stored_PM = False
 global disp_Num
 disp_Num = 1 #variable controlling which display to set
-exit_manual = 0 #variable controlling whether or not the program leaves manual mode
-B_Count = 0 #variable counting up to three in order to set exit_manual == 1
+exit_manual = 0
+B_Count = 0
 
-H1 = 100 #Tracks Hour 1, used to set display and reset the display to what it was set to previously for '#'
-H2 = 100 #Tracks Hour 2, used to set display and reset the display to what it was set to previously for '#'
-M1 = 100 #Tracks Minute 1, used to set display and reset the display to what it was set to previously for '#'
-M2 = 100 #Tracks Minute 2, used to set display and reset the display to what it was set to previously for '#'
-currentDP = 100 #Tracks if the time is AM or PM
+H1 = 100 #Tracks what display is set to, used to reset the display to what it was set to previously for '#'
+H2 = 100 #Tracks what display is set to, used to reset the display to what it was set to previously for '#'
+M1 = 100 #Tracks what display is set to, used to reset the display to what it was set to previously for '#'
+M2 = 100 #Tracks what display is set to, used to reset the display to what it was set to previously for '#'
+currentDP = 100
 
-military_H1 = 100 #Tracks Hour 1 in military time
-military_H2 = 100 #Tracks Hour 2 in military time
+def runManual():
+    global stored_PM
+    global disp_Num
+    global exit_manual
+    global B_Count
+    B_Count = 0
+    exit_manual = 0
 
-#Credit: All
-def runManual(): #Manual Mode code
-    global disp_Num; global exit_manual; global B_Count; global H1; global H2; global M1; global M2; global currentDP
-    B_Count = 0; exit_manual = 0; currentDP = 100
+    global H1
+    global H2
+    global M1
+    global M2
+    global currentDP
+    currentDP = 100
 
-    #Turns off the invalid pin LED
-    #Credit: All
-    def LED_off():
-        GPIO.output(7, GPIO.LOW)
-    
-    #wheel of time: controls how the variables update every time a minute passes. Keeps H1, H2, M1, M2 and DP within valid ranges by incrementing them at appropriate times.
-    #Credit: Nathan
+    #wheel of time rules
     def wheel_of_time():
-
-        
-        global H1; global H2; global M1; global M2; global currentDP; global B_Count
         print("enter Wheel of time")
-    
+        global H1
+        global H2
+        global M1
+        global M2
+        global currentDP
         print(H1,H2,M1,M2,currentDP)
         if M2 < 9:
             M2 = M2 + 1
@@ -128,18 +131,17 @@ def runManual(): #Manual Mode code
                         H1 = 1
                 elif H1 == 1:
                     if H2 < 2:
-                        if H2 == 1:
-                            if currentDP == 0:
-                                currentDP = 1
-                            elif currentDP == 1:
-                                currentDP = 0
                         H2 += 1
+                        if currentDP == 0:
+                            currentDP = 1
+                        elif currentDP == 1:
+                            currentDP = 0
                     elif H2 == 2:
                         H2 = 1
                         H1 = 0
         print("exit Wheel of time")
 
-    #returns the clock GPIO based on a display input. Credit: Lucas
+    #returns the clock GPIO based on a display input
     def setClock(num):
         if num == 1:
             return 11
@@ -153,7 +155,6 @@ def runManual(): #Manual Mode code
     #Credit: Nathan and Lucas wrote. Dawson was not yet in group, but had his own working keypad with previous group
     #Readkeypad searches through the Y given which row, then sets the output to the list number using char
     #Returns Current Value of the keypad output
-    #Credit: All
     def readKeypad(rowNum,char):
         curVal = 100 #initial value for keypad output, cant be a number that is on the display
         GPIO.output(rowNum,GPIO.HIGH)
@@ -171,9 +172,14 @@ def runManual(): #Manual Mode code
             print(curVal)
         GPIO.output(rowNum,GPIO.LOW)
         return curVal
-
-    #runs when hashtag is pressed. Shuts off all displays until hashtag is pressed again, at which point the values are restored. Credit: Nathan and Lucas
+   
     def shadow_realm():
+        
+        global currentDP
+        global H1
+        global H2
+        global M1
+        global M2
         GPIO.output([A, B, C, D, E, F, G, DP], GPIO.LOW)
         GPIO.output(11, GPIO.HIGH)
         time.sleep(0.1)
@@ -194,34 +200,56 @@ def runManual(): #Manual Mode code
         GPIO.output(12,GPIO.LOW)
         while True:
             if readKeypad(6,['*',0,'#','D'])=='#':
-                print("exiting realm")
                 disp_current()
+                if(stored_PM):
+                    GPIO.output(12,GPIO.LOW)
+                    currentDP = 0
+                elif(not(stored_PM)):
+                    GPIO.output(12,GPIO.HIGH)
+                    currentDP = 1
+                time.sleep(0.5)
                 break            
     
+    def tracktime():
+        print("Enter Tracktime")
+        global B_Count
+        while True: #this is not working but I want the display to freeze here.
+            for n in range(1):
+                time.sleep(.5)
+                if readKeypad(19,[4,5,6,'B'])=='B': 
+                    B_Count += 1
+                    print(B_Count)
+                if readKeypad(6,['*',0,'#','D'])=='#': 
+                    shadow_realm()
+
+            if B_Count == 3:
+                print("return to GUI")
+                break
+            wheel_of_time()
+            disp_current()
+
     #returns the next display to set based on input 
     def nextDisp(num):
-        print("The function nextDisp has begun")
+        print("Enter nextDisp")
         global exit_manual
         if num==1:
-            print("Now pointing to display 2")
-            GPIO.output(7, GPIO.LOW) #turn off LED
+            print("changed to 2")
             return 2
             
         elif num==2:
-            print("Now pointing to display 3")
+            print("changed to 3")
             return 3
             
         elif num==3:
-            print("Now pointing to display 4")
+            print("changed to 4")
             return 4
             
         elif num==4:
             tracktime()
-            print("Finished!")
+            print("changed to 1")
             exit_manual = 1
             return 1
         
-    #Displays: Credit: All
     #Displays invalid when A is pressed
     def disp_A():
         GPIO.output(7, GPIO.HIGH)
@@ -237,6 +265,7 @@ def runManual(): #Manual Mode code
     #Displays invalid when D is pressed
     def disp_D():
         GPIO.output(7, GPIO.HIGH)
+
 
     #Displays number 1
     def disp_1(disp_Num):
@@ -338,7 +367,6 @@ def runManual(): #Manual Mode code
         GPIO.output(setClock(disp_Num), GPIO.LOW)
         return 0
 
-    #Flashes current display on and off. Credit: All
     def flash(disp_Num):
         GPIO.output([A, F, G, B, C, D, E], GPIO.HIGH)
         GPIO.output(setClock(disp_Num),GPIO.HIGH)
@@ -351,156 +379,138 @@ def runManual(): #Manual Mode code
         GPIO.output(setClock(disp_Num), GPIO.LOW)
         time.sleep(0.01)
 
-    #Displays all the stored H1, H2, M1, M2, currentDP values on displays 1, 2, 3, 4, and DP. Credit: Nathan and Lucas
-    def disp_current():
-        print("The current variables should be displayed now.")
-        global currentDP; global H1; global H2; global M1; global M2
-        timevals = [[H1,1], [H2,2], [M1,3], [M2,4]]
-        for t in timevals:
-            if t[0]==1:
-                disp_1(t[1])
-            if t[0]==2:
-                disp_2(t[1])
-            if t[0]==3:
-                disp_3(t[1])
-            if t[0]==4:
-                disp_4(t[1])
-            if t[0]==5:
-                disp_5(t[1])
-            if t[0]==6:
-                disp_6(t[1])
-            if t[0]==7:
-                disp_7(t[1])
-            if t[0]==8:
-                disp_8(t[1])
-            if t[0]==9:
-                disp_9(t[1])
-            if t[0]==0:
-                disp_0(t[1])
+    #Displays current value
+    def disp_current():  #took out currentDP
+        print("disp_current")
+        global currentDP
+        global H1
+        global H2
+        global M1
+        global M2
+        if H1==1:
+            disp_1(1)
+        if H1==2:
+            disp_2(1)
+        if H1==3:
+            disp_3(1)
+        if H1==4:
+            disp_4(1)
+        if H1==5:
+            disp_5(1)
+        if H1==6:
+            disp_6(1)
+        if H1==7:
+            disp_7(1)
+        if H1==8:
+            disp_8(1)
+        if H1==9:
+            disp_9(1)
+        if H1==0:
+            disp_0(1)
+        if H2==1:
+            disp_1(2)
+        if H2==2:
+            disp_2(2)
+        if H2==3:
+            disp_3(2)
+        if H2==4:
+            disp_4(2)
+        if H2==5:
+            disp_5(2)
+        if H2==6:
+            disp_6(2)
+        if H2==7:
+            disp_7(2)
+        if H2==8:
+            disp_8(2)
+        if H2==9:
+            disp_9(2)
+        if H2==0:
+            disp_0(2)
+        if M1==1:
+            disp_1(3)
+        if M1==2:
+            disp_2(3)
+        if M1==3:
+            disp_3(3)
+        if M1==4:
+            disp_4(3)
+        if M1==5:
+            disp_5(3)
+        if M1==6:
+            disp_6(3)
+        if M1==7:
+            disp_7(3)
+        if M1==8:
+            disp_8(3)
+        if M1==9:
+            disp_9(3)
+        if M1==0:
+            disp_0(3)
+        if M2==1:
+            disp_1(4)
+        if M2==2:
+            disp_2(4)
+        if M2==3:
+            disp_3(4)
+        if M2==4:
+            disp_4(4)
+        if M2==5:
+            disp_5(4)
+        if M2==6:
+            disp_6(4)
+        if M2==7:
+            disp_7(4)
+        if M2==8:
+            disp_8(4)
+        if M2==9:
+            disp_9(4)
+        if M2==0:
+            disp_0(4)
         if currentDP==1:
-            GPIO.setup(12, GPIO.OUT, initial=GPIO.HIGH)
-        if currentDP==0:
-            GPIO.setup(12, GPIO.OUT, initial=GPIO.LOW)
+                GPIO.setup(12, GPIO.OUT, initial=GPIO.HIGH)
 
-    #tracking mode after time is input manually. Credit: Nathan
-    def tracktime(): 
-        global H1; global H2; global M1; global M2; global currentDP;  global B_Count #list global variables
-        print("Tracktime is Executing")
-        while True:
-            for n in range(120):
-                time.sleep(.5)
-                if readKeypad(19,[4,5,6,'B'])=='B': #increase B count when B is pressed
-                    B_Count += 1
-                    print(B_Count)
-                if readKeypad(6,['*',0,'#','D'])=='#': #enter shadow realm when # is pressed
-                    print("entering realm")
-                    shadow_realm()
-
-            wheel_of_time() #update variables
-            disp_current() #update displays
-            if B_Count == 3:
-                print("return to GUI")
-                H1 = 100; H2 = 100; M1 = 100; M2 = 100; currentDP = 100
-                break #leave tracktime, ultimately breaks the infinite loop running the function
-
-    #verifies that values returned from read keypad are valid for their display. Updates variables and returns True or False. Credit: Nathan
-    def verify(disp_Num, curVal):
-        global H1; global H2; global M1; global military_H1; global military_H2; global currentDP
-        print("You just pressed", curVal)
-        print("We are filling Display #", disp_Num)
-        print("H1 is currently equal to", H1)
-        print("Verification Begun")
+    def verify(disp_Num, curVal, H1):
+        print("curval", curVal)
+        print("disp num", disp_Num)
+        print("h1", H1)
+        print("verify")
         if disp_Num == 1:
-            print("Display 1")
-            if curVal == 0:
-                H1 = 0
-                currentDP = 0
+            if curVal == 0 or curVal==1:
                 return True
-            elif curVal == 1:
-                military_H1 = 1
-                return True
-            elif curVal == 2:
-                military_H1 = 2
-                print("Military_H1 = ",military_H1)
-                return True
-            else: # curVal == (3 or 4 or 5 or 6 or 7 or 8 or 9):
+            else: # curVal == (2 or 3 or 4 or 5 or 6 or 7 or 8 or 9):
                 print("bad number")
                 return False
-        elif disp_Num == 2:
+        if disp_Num == 2:
             if H1 == 0:
                 if curVal == 0:
-                    H1 = 1
-                    H2 = 2
-                    return True
-                else:
-                    H2 = curVal
-                    return True
-            if military_H1 == 1:
-                if curVal < 2:
-                    if curVal == 0:
-                        H1 = 1
-                        H2 = 0
-                    if curVal == 1:
-                        H1 = 1
-                        H2 = 1
-                    currentDP = 0
-                else:
-                    if curVal == 2:
-                        H1 = 1
-                        H2 = 2
-                    elif curVal == 3:
-                        H1 = 0
-                        H2 = 1
-                    elif curVal == 4:
-                        H1 = 0
-                        H2 = 2
-                    elif curVal == 5:
-                        H1 = 0
-                        H2 = 3
-                    elif curVal == 6:
-                        H1 = 0
-                        H2 = 4
-                    elif curVal == 7:
-                        H1 = 0
-                        H2 = 5
-                    elif curVal == 8:
-                        H1 = 0
-                        H2 = 6
-                    elif curVal == 9:
-                        H1 = 0
-                        H2 = 7
-                    currentDP = 1
-                return True
-            elif military_H1 == 2:
-                if curVal < 4:
-                    if curVal == 0:
-                        H1 = 0
-                        H2 = 8
-                    elif curVal == 1:
-                        H1 = 0
-                        H2 = 9
-                    elif curVal == 2:
-                        H1 = 1
-                        H2 = 0
-                    elif curVal == 3:
-                        H1 = 1
-                        H2 = 1
-                    currentDP = 1
-                    return True
-                else:
                     print("bad number")
                     return False
-        elif disp_Num == 3:
+                else:
+                    return True
+            if H1 == 1:
+                if curVal == 0 or curVal == 1 or curVal == 2:
+                    return True
+                else: # curVal == 3 or 4 or 5 or 6 or 7 or 8 or 9:
+                    print("bad number")
+                    return False
+        if disp_Num == 3:
             if curVal == 0 or curVal == 1 or curVal == 2 or curVal == 3 or curVal == 4 or curVal == 5:
                 return True
             else: # curVal == 6 or 7 or 8 or 9:
                 print("bad number")
                 return False
 
-    #moves pointer around so the program knows which display to update next. Credit: Lucas
+
+
+
     def setCurrent(num, disp_Num):
         print("setcurrent")
-        global currentDP; global H1; global H2; global M1; global M2
+        global currentDP
+        global H1
+        global H2
+        global M1
+        global M2
         print(disp_Num)
     
         if disp_Num==1:
@@ -512,158 +522,105 @@ def runManual(): #Manual Mode code
         elif disp_Num==4:
             M2 = num
 
-    #verifies, updates variables, and displays any numeric input
-    #lights invalid LED for invalid numeric inputs, star, and letters
-    #enters the shadow realm for '#' inputs 
-    #loop broken if exit_manual == 1, eventually breaking the runManual infinite loop
-    def single_7SD(disp_Num): #Credit: All
-        global H1; global exit_manual
+    def single_7SD(disp_Num):
+        global stored_PM
+        global H1
+        global exit_manual
         while True:
-            #print("[", H1, "] [", H2, "] [", M1, "] [", M2, "]")
+    
+            print("[", H1, "] [", H2, "] [", M1, "] [", M2, "]")
             flash(disp_Num)
             if readKeypad(26,[1,2,3,'A'])==1:
-                if verify(disp_Num,1) == False:
+                if verify(disp_Num,1,H1) == False:
                     disp_C()
                 else:
-                    if disp_Num == 1:
-                        disp_Num = nextDisp(disp_Num) 
-                    elif disp_Num == 2:
-                        disp_current()
-                        disp_Num = nextDisp(disp_Num)
-                    else:
-                        if disp_1(disp_Num) == 1:
-                            setCurrent(1, disp_Num)
-                            disp_Num = nextDisp(disp_Num)                  
+                    if disp_1(disp_Num) == 1:
+                        setCurrent(1, disp_Num)
+                        disp_Num = nextDisp(disp_Num)                  
             if readKeypad(26,[1,2,3,'A'])==2:
-                if verify(disp_Num,2) == False:
+                if verify(disp_Num,2,H1) == False:
                     disp_C()
                 else:
-                    if disp_Num == 1:
-                        disp_Num = nextDisp(disp_Num) 
-                    elif disp_Num == 2:
-                        disp_current()
+                    if disp_2(disp_Num) == 2:
+                        setCurrent(2, disp_Num)
                         disp_Num = nextDisp(disp_Num)
-                    else:
-                        if disp_2(disp_Num) == 2:
-                            setCurrent(2, disp_Num)
-                            disp_Num = nextDisp(disp_Num)
             if readKeypad(26,[1,2,3,'A'])==3:
-                if verify(disp_Num,3) == False:
+                if verify(disp_Num,3,H1) == False:
                     disp_C()
                 else:
-                    if disp_Num == 1:
-                        disp_Num = nextDisp(disp_Num) 
-                    elif disp_Num == 2:
-                        disp_current()
+                    if disp_3(disp_Num) == 3:
+                        setCurrent(3, disp_Num)
                         disp_Num = nextDisp(disp_Num)
-                    else:
-                        if disp_3(disp_Num) == 3:
-                            setCurrent(3, disp_Num)
-                            disp_Num = nextDisp(disp_Num)
             if readKeypad(26,[1,2,3,'A'])=='A':
                 disp_A()
             if readKeypad(19,[4,5,6,'B'])==4:
-                if verify(disp_Num,4) == False:
+                if verify(disp_Num,4,H1) == False:
                     disp_C()
                 else:
-                    if disp_Num == 1:
-                        disp_Num = nextDisp(disp_Num) 
-                    elif disp_Num == 2:
-                        disp_current()
+                    if disp_4(disp_Num) == 4:
+                        setCurrent(4, disp_Num)
                         disp_Num = nextDisp(disp_Num)
-                    else:
-                        if disp_4(disp_Num) == 4:
-                            setCurrent(4, disp_Num)
-                            disp_Num = nextDisp(disp_Num)
             if readKeypad(19,[4,5,6,'B'])==5:
-                if verify(disp_Num,5) == False:
+                if verify(disp_Num,5,H1) == False:
                     disp_C()
                 else:
-                    if disp_Num == 1:
-                        disp_Num = nextDisp(disp_Num) 
-                    elif disp_Num == 2:
-                        disp_current()
+                    if disp_5(disp_Num) == 5:
+                        setCurrent(5, disp_Num)
                         disp_Num = nextDisp(disp_Num)
-                    else:
-                        if disp_5(disp_Num) == 5:
-                            setCurrent(5, disp_Num)
-                            disp_Num = nextDisp(disp_Num)
             if readKeypad(19,[4,5,6,'B'])==6:
-                if verify(disp_Num,6) == False:
+                if verify(disp_Num,6,H1) == False:
                     disp_C()
                 else:
-                    if disp_Num == 1:
-                        disp_Num = nextDisp(disp_Num) 
-                    elif disp_Num == 2:
-                        disp_current()
+                    if disp_6(disp_Num) == 6:
+                        setCurrent(6, disp_Num)
                         disp_Num = nextDisp(disp_Num)
-                    else:
-                        if disp_6(disp_Num) == 6:
-                            setCurrent(6, disp_Num)
-                            disp_Num = nextDisp(disp_Num)
             if readKeypad(19,[4,5,6,'B'])=='B':
                 disp_B()
             if readKeypad(13,[7,8,9,'C'])==7:
-                if verify(disp_Num,7) == False:
+                if verify(disp_Num,7,H1) == False:
                     disp_C()
+                    print("bad number reognized")
                 else:
-                    if disp_Num == 1:
-                        disp_Num = nextDisp(disp_Num) 
-                    elif disp_Num == 2:
-                        disp_current()
+                    print("number passed verification")
+                    if disp_7(disp_Num) == 7:
+                        setCurrent(7, disp_Num)
                         disp_Num = nextDisp(disp_Num)
-                    else:
-                        if disp_7(disp_Num) == 7:
-                            setCurrent(7, disp_Num)
-                            disp_Num = nextDisp(disp_Num)
             if readKeypad(13,[7,8,9,'C'])==8:
-                if verify(disp_Num,8) == False:
+                if verify(disp_Num,8,H1) == False:
                     disp_C()
                 else:
-                    if disp_Num == 1:
-                        disp_Num = nextDisp(disp_Num) 
-                    elif disp_Num == 2:
-                        disp_current()
+                    if disp_8(disp_Num) == 8:
+                        setCurrent(8, disp_Num)
                         disp_Num = nextDisp(disp_Num)
-                    else:
-                        if disp_8(disp_Num) == 8:
-                            setCurrent(8, disp_Num)
-                            disp_Num = nextDisp(disp_Num)
             if readKeypad(13,[7,8,9,'C'])==9:
-                if verify(disp_Num,9) == False:
+                if verify(disp_Num,9,H1) == False:
                     disp_C()
                 else:
-                    if disp_Num == 1:
-                        disp_Num = nextDisp(disp_Num) 
-                    elif disp_Num == 2:
-                        disp_current()
+                    if disp_9(disp_Num) == 9:
+                        setCurrent(9, disp_Num)
                         disp_Num = nextDisp(disp_Num)
-                    else:
-                        if disp_9(disp_Num) == 9:
-                            setCurrent(9, disp_Num)
-                            disp_Num = nextDisp(disp_Num)
             if readKeypad(13,[7,8,9,'C'])=='C':
                 disp_C()
             if readKeypad(6,['*',0,'#','D'])=='*':
-                disp_C()
+            
+                if stored_PM == True:
+                    stored_PM = False
+                    GPIO.output(12,GPIO.HIGH)
+                elif stored_PM == False:
+                    stored_PM = True
+                    GPIO.output(12,GPIO.LOW)
             if readKeypad(6,['*',0,'#','D'])==0:
-                if verify(disp_Num,0) == False:
+                if verify(disp_Num,0,H1) == False:
                     disp_C()
                 else:
-                    if disp_Num == 1:
-                        if disp_0(disp_Num) == 0:
-                            setCurrent(0, disp_Num)
-                            disp_Num = nextDisp(disp_Num) 
-                    elif disp_Num == 2:
-                        disp_current()
+                    if disp_0(disp_Num) == 0:
+                        setCurrent(0, disp_Num)
                         disp_Num = nextDisp(disp_Num)
-                    else:
-                        if disp_0(disp_Num) == 0:
-                            setCurrent(0, disp_Num)
-                            disp_Num = nextDisp(disp_Num)
             if readKeypad(6,['*',0,'#','D'])=='#': #Credit: Code wrote by Lucas, Tested and improved by all members
+                
                 shadow_realm()
                 time.sleep(0.5)
+                
             if readKeypad(6,['*',0,'#','D'])=='D': 
                 disp_D()
 
@@ -671,8 +628,16 @@ def runManual(): #Manual Mode code
                 print("go back")
                 break
     
+
+        #Turns off the invalid pin LED
+    def LED_off():
+        GPIO.output(7, GPIO.LOW)
+
+    #sets up GPIO PINS
+    #REMOVE FOR RUNMANUAL() IMPLEMENTATION
     init_pins()
-    #run single_7SD until loop breaks, causing the file to terminate. Credit: All
+
     while True:
         single_7SD(disp_Num)
+        
         break
