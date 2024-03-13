@@ -1,3 +1,5 @@
+#Credit: Lucas
+
 import RPi.GPIO as GPIO
 from datetime import datetime
 import time

@@ -395,12 +395,18 @@ def runManual(): #Manual Mode code
                 if readKeypad(6,['*',0,'#','D'])=='#': #enter shadow realm when # is pressed
                     print("entering realm")
                     shadow_realm()
-
+                if B_Count >= 3:
+                    print("return to GUI")
+                    break #leave tracktime, ultimately breaks the infinite loop running the function
             wheel_of_time() #update variables
             disp_current() #update displays
-            if B_Count == 3:
+            if B_Count >= 3:
                 print("return to GUI")
-                H1 = 100; H2 = 100; M1 = 100; M2 = 100; currentDP = 100
+                H1 = 100 
+                H2 = 100 
+                M1 = 100 
+                M2 = 100 
+                currentDP = 100
                 break #leave tracktime, ultimately breaks the infinite loop running the function
 
     #verifies that values returned from read keypad are valid for their display. Updates variables and returns True or False. Credit: Nathan
