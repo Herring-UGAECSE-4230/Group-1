@@ -1,6 +1,6 @@
 #Program name
 
-OBJS = 4_delay_ex4_3.o
+OBJS = 4_delay_ex4_3_ext.o
 
 DEBUG = 1
 
@@ -14,9 +14,9 @@ endif
 # The % is a wildcard.  For below, reads as for all .s files and create a .0 file with DEBUGFLGS output
 %.o : %.s
 	as $(DEBUGFLGS) $< -o $@
-${PROG}: $(OBJS)
-	ld -o 4_delay_ex4_3 $(OBJS)
+4_delay_ex4_3_ext: $(OBJS)
+	ld -o 4_delay_ex4_3_ext $(OBJS)
 
 #cleanup
 clean: $(OBJS)
-	rm *.o 4_delay_ex4_3
+	rm *.o 4_delay_ex4_3_ext
