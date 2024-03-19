@@ -1,0 +1,149 @@
+11	again:	mov	r2, #0x55	@ r2 = 0x55
+(gdb) s
+12		bl	delay  	@ call delay (r14 = pc of next instruction)
+(gdb) s
+delay () at FuncStack1_ex4_8.s:21
+21	delay:	ldr	r3, =5		@ r3 =5, modify this value for different delay 
+(gdb) s
+l1 () at FuncStack1_ex4_8.s:22
+22	l1:	subs	r3, r3, #1	@ r3 = r3 - 1 
+(gdb) s
+23		bne	l1
+(gdb) s
+22	l1:	subs	r3, r3, #1	@ r3 = r3 - 1 
+(gdb) s
+23		bne	l1
+(gdb) s
+22	l1:	subs	r3, r3, #1	@ r3 = r3 - 1 
+(gdb) s
+23		bne	l1
+(gdb) s
+22	l1:	subs	r3, r3, #1	@ r3 = r3 - 1 
+(gdb) s
+23		bne	l1
+(gdb) s
+22	l1:	subs	r3, r3, #1	@ r3 = r3 - 1 
+(gdb) s
+23		bne	l1
+(gdb) s
+24		bx	lr		@ return to caller
+(gdb) s
+_start () at FuncStack1_ex4_8.s:13
+13		mov	r2, #0xaa	@ r2 = 0xaa
+(gdb) s
+14		bl	delay  	@ call delay 
+(gdb) s
+delay () at FuncStack1_ex4_8.s:21
+21	delay:	ldr	r3, =5		@ r3 =5, modify this value for different delay 
+(gdb) s
+l1 () at FuncStack1_ex4_8.s:22
+22	l1:	subs	r3, r3, #1	@ r3 = r3 - 1 
+(gdb) s
+23		bne	l1
+(gdb) s
+22	l1:	subs	r3, r3, #1	@ r3 = r3 - 1 
+(gdb) s
+23		bne	l1
+(gdb) s
+22	l1:	subs	r3, r3, #1	@ r3 = r3 - 1 
+(gdb) s
+23		bne	l1
+(gdb) s
+22	l1:	subs	r3, r3, #1	@ r3 = r3 - 1 
+(gdb) s
+23		bne	l1
+(gdb) s
+22	l1:	subs	r3, r3, #1	@ r3 = r3 - 1 
+(gdb) s
+23		bne	l1
+(gdb) s
+24		bx	lr		@ return to caller
+(gdb) s
+_start () at FuncStack1_ex4_8.s:15
+15		b	again   	@ keep doing it
+(gdb) s
+
+Breakpoint 1, _start () at FuncStack1_ex4_8.s:11
+11	again:	mov	r2, #0x55	@ r2 = 0x55
+(gdb) s
+12		bl	delay  	@ call delay (r14 = pc of next instruction)
+(gdb) s
+delay () at FuncStack1_ex4_8.s:21
+21	delay:	ldr	r3, =5		@ r3 =5, modify this value for different delay 
+(gdb) s
+l1 () at FuncStack1_ex4_8.s:22
+22	l1:	subs	r3, r3, #1	@ r3 = r3 - 1 
+(gdb) s
+23		bne	l1
+(gdb) s
+22	l1:	subs	r3, r3, #1	@ r3 = r3 - 1 
+(gdb) s
+23		bne	l1
+(gdb) s
+22	l1:	subs	r3, r3, #1	@ r3 = r3 - 1 
+(gdb) s
+23		bne	l1
+(gdb) s
+22	l1:	subs	r3, r3, #1	@ r3 = r3 - 1 
+(gdb) s
+23		bne	l1
+(gdb) s
+22	l1:	subs	r3, r3, #1	@ r3 = r3 - 1 
+(gdb) s
+23		bne	l1
+(gdb) s
+24		bx	lr		@ return to caller
+(gdb) s
+_start () at FuncStack1_ex4_8.s:13
+13		mov	r2, #0xaa	@ r2 = 0xaa
+(gdb) s
+14		bl	delay  	@ call delay 
+(gdb) s
+delay () at FuncStack1_ex4_8.s:21
+21	delay:	ldr	r3, =5		@ r3 =5, modify this value for different delay 
+(gdb) s
+l1 () at FuncStack1_ex4_8.s:22
+22	l1:	subs	r3, r3, #1	@ r3 = r3 - 1 
+(gdb) s
+23		bne	l1
+(gdb) s
+22	l1:	subs	r3, r3, #1	@ r3 = r3 - 1 
+(gdb) s
+23		bne	l1
+(gdb) s
+22	l1:	subs	r3, r3, #1	@ r3 = r3 - 1 
+(gdb) s
+23		bne	l1
+(gdb) s
+22	l1:	subs	r3, r3, #1	@ r3 = r3 - 1 
+(gdb) s
+23		bne	l1
+(gdb) s
+22	l1:	subs	r3, r3, #1	@ r3 = r3 - 1 
+(gdb) s
+23		bne	l1
+(gdb) s
+24		bx	lr		@ return to caller
+(gdb) s
+_start () at FuncStack1_ex4_8.s:15
+15		b	again   	@ keep doing it
+(gdb) s
+
+Breakpoint 1, _start () at FuncStack1_ex4_8.s:11
+11	again:	mov	r2, #0x55	@ r2 = 0x55
+(gdb) s
+12		bl	delay  	@ call delay (r14 = pc of next instruction)
+(gdb) s
+delay () at FuncStack1_ex4_8.s:21
+21	delay:	ldr	r3, =5		@ r3 =5, modify this value for different delay 
+(gdb) s
+l1 () at FuncStack1_ex4_8.s:22
+22	l1:	subs	r3, r3, #1	@ r3 = r3 - 1 
+(gdb) s
+23		bne	l1
+(gdb) s
+22	l1:	subs	r3, r3, #1	@ r3 = r3 - 1 
+(gdb) q
+
+
+Modified Program:
