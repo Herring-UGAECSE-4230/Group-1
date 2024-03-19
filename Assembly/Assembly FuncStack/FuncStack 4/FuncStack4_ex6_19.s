@@ -18,7 +18,7 @@ _start: ldr  	r0, =0x125	@ r0 = 0x125
 
 myFunc:
 	@ --------save r0, r1, and r2 on stack before they are used by a loop	
-	stmdb   r13!, {r0, r1, r2}
+	push	{r0, r1, r2}
 
 	@ --------r0, r1, and r2 are changed
 	mov  	r0, #0	 	@ r0=0
@@ -26,6 +26,6 @@ myFunc:
 	mov  	r2, #0	 	@ r2=0
 
 	@ ---------restore the original registers contents from stack
-	ldmia   r13!, {r0, r1, r2}
+	pop	{r0, r1, r2}
 
 	bx	lr 		@ return to caller
