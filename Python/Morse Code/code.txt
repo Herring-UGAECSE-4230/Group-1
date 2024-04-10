@@ -1,0 +1,228 @@
+import RPi.GPIO as GPIO #import RPi
+import time
+import numpy as np
+import simpleaudio as sa
+
+LED_PIN = 9
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(LED_PIN, GPIO.IN)
+
+
+keypresstime = 0
+flag = 0
+dash = 0 #seconds for a dash
+dot = 0 #seconds for a dot
+newLine_or_word = 0 #seconds between new lines or words
+delay = 0 #seconds for delay after each dot or dash
+threshold = 0 #defines the boundary between dot and dash
+opentime = 0 #time the key is not pressed
+leave = False # exit program
+
+MC = "-.-.-\n"
+currentWord = ""
+english = "ATTENTION"
+
+frequency = 500 #generated tone frequency
+fs = 44100 #sampling fruequency
+seconds = 10 #duration tone will be played for
+t=np.linspace(0,seconds,seconds * fs, False) #array for sine wave
+note = np.sin(frequency*t*2*np.pi) # sine wave creation
+audio = note*(2**15-1)/np.max(np.abs(note)) #ensure within output range
+audio = audio.astype(np.int16) #audio to 16 bit format
+
+input_file = r"/home/nnlm/Documents/Group-1/Python/Morse Code/input.txt" #File input locations in the form of r\"FILE_LOCATION"
+output_file = r"/home/nnlm/Documents/Group-1/Python/Morse Code/output.txt" #File output locations in the form of r\"FILE_LOCATION"
+            
+#dictionary converts morse code characters to english
+dictionary = {
+    '.-': 'A', '-...': 'B', '-.-.': 'C', '-..': 'D', '.': 'E', '..-.': 'F', '--.': 'G', '....': 'H',
+    '..': 'I', '.---': 'J', '-.-': 'K', '.-..': 'L', '--': 'M', '-.': 'N', '---': 'O', '.--.': 'P',
+    '--.-': 'Q', '.-.': 'R', '...': 'S', '-': 'T', '..-': 'U', '...-': 'V', '.--': 'W', '-..-': 'X',
+    '-.--': 'Y', '--..': 'Z', '-----': '0', '.----': '1', '..---': '2', '...--': '3', '....-': '4',
+    '.....': '5', '-....': '6', '--...': '7', '---..': '8', '----.': '9', '\n': ''
+}
+
+#adds a dot to input and output
+def dot():
+    global MC
+    global currentWord; global opentime
+    MC += "."
+    currentWord += "."
+    open(input_file, 'w').write(MC) 
+    opentime = 0
+
+#adds a dash to input and output
+def dash():
+    global MC
+    global currentWord; global opentime
+    MC += "-"
+    currentWord += "-"
+    open(input_file, 'w').write(MC) 
+    opentime = 0
+
+#adds a space to input and output
+def space():
+    global MC
+    global currentWord; global flag
+    MC += " "
+    flag = 0
+    currentWord += " "
+    open(input_file, 'w').write(MC) 
+
+#adds a new line to input and output
+def newLine():
+    global flag
+    global MC
+    global currentWord
+    MC += "\n"
+    flag = 1
+    open(input_file, 'w').write(MC) 
+
+#takes a single word of morse code and adds the english to the output file
+def convert():
+    global leave; global flag
+    global currentWord #the single word being converted
+    global english #the english output file
+    print("Current word: ")
+    print(currentWord)
+    temp = "" #used to grab each letter from the currentWord
+    currentWord = currentWord.strip()
+    english += "\n" #after the entire word is added, add a new line 
+    currentWord += " "
+    for char in currentWord: #go char by char in currentWord
+        if char != " ":
+            temp += char
+        else:
+            if temp == "-.-.-":
+                english += "ATTENTION"
+            elif temp == "-.-" and flag == 1:
+                english += "OVER"
+            elif temp == ".-.-.":
+                english += "OUT"
+                open(output_file, 'w').write(english)
+                output_file.close()
+                input_file.close()
+                leave = True
+            elif temp in dictionary:
+                english += dictionary[temp]
+            else: 
+                english += "?"
+            temp = ""
+    
+    if leave == False:
+        print("output file time")
+        open(output_file, 'w').write(english) 
+
+#counts opentime for attention subroutine
+def sound_of_silence():
+    if GPIO.input(LED_PIN) == 0:
+        global opentime
+        print("the telegraph is not pressed\n")
+        sa.stop_all()
+        time.sleep(0.05)
+        while True:
+            opentime += 1
+            time.sleep(.001)
+            if GPIO.input(LED_PIN) == 1:
+                break   
+
+#counts keypress time during key press
+#called by mail time function
+def telegraph_input():
+    global keypresstime; global LED_PIN
+    keypresstime = 0
+    print("checking pin...\n")
+
+    if GPIO.input(LED_PIN) == 1:
+        sa.play_buffer(audio, 1, 2, fs)
+        time.sleep(0.05)
+        print("the telegraph is pressed!\n")
+        while True:
+            keypresstime += 1
+            time.sleep(.001)
+            if GPIO.input(LED_PIN) == 0:
+                break
+    sa.stop_all()
+    print("keypresstime = " + str(keypresstime) + " counts.\n")
+
+#calculates threshold for dots and dashes based on code word "ATTENTION" input
+#run before main loop
+def give_me_attention():
+    global keypresstime; global dash; global dot; global newLine_or_word; global delay; global threshold; global opentime
+    print("Notice me!\n" + "Give me attention: ")
+    attnls = [[0,0],[1,0],[2,0],[3,0],[4,0]]
+    totalpresstime = 0
+    for a in range(5):
+        sound_of_silence()
+        telegraph_input()
+        attnls[a][1] = keypresstime
+        totalpresstime += keypresstime
+        print("You noticed me for " + str(keypresstime) + " cycles.")
+    sa.stop_all()
+    time.sleep(0.05)
+    print("attnls:\n" + str(attnls[0][1]) + "\n" + str(attnls[1][1]) + "\n" + str(attnls[2][1]) + "\n" + str(attnls[3][1]) + "\n" + str(attnls[4][1]) + "\n")
+    threshold = totalpresstime*2/11
+    print("Threshold cycles = " + str(threshold) + "\n")
+    opentime = 0
+
+#repaste def convert & def convert_with_text
+#repaste def convert_with_text
+def silence_sorting():
+    global opentime
+    global currentWord
+    global english
+    print("You have broken the silence. " + "Opentime is equal to: " + str(opentime))
+    if opentime < (threshold*1.5):
+        opentime = 0
+        print("I'm listening for the same character. \n")
+        #do nothing
+    elif (threshold*1.5) <= opentime <= (threshold*3.5):
+        opentime = 0
+        print("I'm listening for a NEW letter. \n")
+        space()
+    else:
+        opentime = 0
+        print("I'm listening for a NEW word. \n")
+        #write the word to text file
+        if currentWord != " ":
+            convert()
+            if english != "ATTENTION":
+                newLine()  
+        currentWord = ""
+    
+        
+#determines sorting for identifying dots and dashes
+def press_sorting():
+    global keypresstime
+    print("New input. " + "Keypresstime is equal to: " + str(opentime))
+    if keypresstime < (threshold):
+        print("That's a dot. \n")
+        dot()
+    else:
+        print("That's a dash. \n")
+        dash()
+    keypresstime = 0
+
+#callbck for interrup that tracks rising edge of morse code key
+def mail_time(channel):
+    print("Incoming data...")
+    silence_sorting()
+    telegraph_input()
+    press_sorting()
+
+    time.sleep(0.1)
+
+
+#main program
+print("You've entered the Morse Code Program.\n")
+time.sleep(1)
+give_me_attention()
+
+print("What's on your mind?")
+
+GPIO.add_event_detect(LED_PIN,GPIO.RISING,callback=mail_time,bouncetime=50)
+while True:
+    opentime += 1
+    time.sleep(.001) #millisecond delay to coordinate timing
+    if leave == True:
+        break

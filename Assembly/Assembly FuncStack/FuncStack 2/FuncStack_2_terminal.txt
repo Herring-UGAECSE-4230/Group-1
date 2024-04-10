@@ -1,0 +1,383 @@
+Breakpoint 1, _start () at FuncStack2_Prog4_3.s:39
+39		bl	fill		@ call block fill subroutine
+(gdb) s
+fill () at FuncStack2_Prog4_3.s:14
+14	fill:	ldr  	r1, =a	@ r1 = ram address pointer
+(gdb) s
+15		mov	r0, #10	 	@ counter
+(gdb) s
+16		ldr	r2, =0x55555555
+(gdb) s
+l1 () at FuncStack2_Prog4_3.s:17
+17	l1:	str	r2, [r1]	@ send it to ram
+(gdb) s
+18		add	r1, r1, #4	@ r1 = r1 + 4 to increment pointer
+(gdb) s
+19		subs	r0, r0, #1	@ r0 = r0 - 1 to decrement counter 
+(gdb) s
+21		bne	l1		@ keep doing it until r0 is 0
+(gdb) i r
+r0             0x9                 9
+r1             0x200dc             131292
+r2             0x55555555          1431655765
+r3             0x0                 0
+r4             0x0                 0
+r5             0x0                 0
+r6             0x0                 0
+r7             0x0                 0
+r8             0x0                 0
+r9             0x0                 0
+r10            0x0                 0
+r11            0x0                 0
+r12            0x0                 0
+sp             0xfffef290          0xfffef290
+lr             0x100c0             65728
+pc             0x1008c             0x1008c <l1+12>
+cpsr           0x20000010          536870928
+fpscr          0x0                 0
+(gdb) s
+17	l1:	str	r2, [r1]	@ send it to ram
+(gdb) s
+18		add	r1, r1, #4	@ r1 = r1 + 4 to increment pointer
+(gdb) s
+19		subs	r0, r0, #1	@ r0 = r0 - 1 to decrement counter 
+(gdb) s
+21		bne	l1		@ keep doing it until r0 is 0
+(gdb) i r
+r0             0x8                 8
+r1             0x200e0             131296
+r2             0x55555555          1431655765
+r3             0x0                 0
+r4             0x0                 0
+r5             0x0                 0
+r6             0x0                 0
+r7             0x0                 0
+r8             0x0                 0
+r9             0x0                 0
+r10            0x0                 0
+r11            0x0                 0
+r12            0x0                 0
+sp             0xfffef290          0xfffef290
+lr             0x100c0             65728
+pc             0x1008c             0x1008c <l1+12>
+cpsr           0x20000010          536870928
+fpscr          0x0                 0
+(gdb) s
+17	l1:	str	r2, [r1]	@ send it to ram
+(gdb) s
+18		add	r1, r1, #4	@ r1 = r1 + 4 to increment pointer
+(gdb) s
+19		subs	r0, r0, #1	@ r0 = r0 - 1 to decrement counter 
+(gdb) s
+21		bne	l1		@ keep doing it until r0 is 0
+(gdb) s
+17	l1:	str	r2, [r1]	@ send it to ram
+(gdb) s
+18		add	r1, r1, #4	@ r1 = r1 + 4 to increment pointer
+(gdb) s
+19		subs	r0, r0, #1	@ r0 = r0 - 1 to decrement counter 
+(gdb) s
+21		bne	l1		@ keep doing it until r0 is 0
+(gdb) s
+17	l1:	str	r2, [r1]	@ send it to ram
+(gdb) s
+18		add	r1, r1, #4	@ r1 = r1 + 4 to increment pointer
+(gdb) s
+19		subs	r0, r0, #1	@ r0 = r0 - 1 to decrement counter 
+(gdb) s
+21		bne	l1		@ keep doing it until r0 is 0
+(gdb) s
+17	l1:	str	r2, [r1]	@ send it to ram
+(gdb) s
+18		add	r1, r1, #4	@ r1 = r1 + 4 to increment pointer
+(gdb) s
+19		subs	r0, r0, #1	@ r0 = r0 - 1 to decrement counter 
+(gdb) s
+21		bne	l1		@ keep doing it until r0 is 0
+(gdb) s
+17	l1:	str	r2, [r1]	@ send it to ram
+(gdb) s
+18		add	r1, r1, #4	@ r1 = r1 + 4 to increment pointer
+(gdb) s
+19		subs	r0, r0, #1	@ r0 = r0 - 1 to decrement counter 
+(gdb) s
+21		bne	l1		@ keep doing it until r0 is 0
+(gdb) s
+17	l1:	str	r2, [r1]	@ send it to ram
+(gdb) s
+18		add	r1, r1, #4	@ r1 = r1 + 4 to increment pointer
+(gdb) s
+19		subs	r0, r0, #1	@ r0 = r0 - 1 to decrement counter 
+(gdb) s
+21		bne	l1		@ keep doing it until r0 is 0
+(gdb) s
+17	l1:	str	r2, [r1]	@ send it to ram
+(gdb) s
+18		add	r1, r1, #4	@ r1 = r1 + 4 to increment pointer
+(gdb) s
+19		subs	r0, r0, #1	@ r0 = r0 - 1 to decrement counter 
+(gdb) s
+21		bne	l1		@ keep doing it until r0 is 0
+(gdb) s
+17	l1:	str	r2, [r1]	@ send it to ram
+(gdb) s
+18		add	r1, r1, #4	@ r1 = r1 + 4 to increment pointer
+(gdb) s
+19		subs	r0, r0, #1	@ r0 = r0 - 1 to decrement counter 
+(gdb) s
+21		bne	l1		@ keep doing it until r0 is 0
+(gdb) i r
+r0             0x0                 0
+r1             0x20100             131328
+r2             0x55555555          1431655765
+r3             0x0                 0
+r4             0x0                 0
+r5             0x0                 0
+r6             0x0                 0
+r7             0x0                 0
+r8             0x0                 0
+r9             0x0                 0
+r10            0x0                 0
+r11            0x0                 0
+r12            0x0                 0
+sp             0xfffef290          0xfffef290
+lr             0x100c0             65728
+pc             0x1008c             0x1008c <l1+12>
+cpsr           0x60000010          1610612752
+fpscr          0x0                 0
+(gdb) s
+22		bx	lr		@ return to caller
+(gdb) i r
+r0             0x0                 0
+r1             0x20100             131328
+r2             0x55555555          1431655765
+r3             0x0                 0
+r4             0x0                 0
+r5             0x0                 0
+r6             0x0                 0
+r7             0x0                 0
+r8             0x0                 0
+r9             0x0                 0
+r10            0x0                 0
+r11            0x0                 0
+r12            0x0                 0
+sp             0xfffef290          0xfffef290
+lr             0x100c0             65728
+pc             0x10090             0x10090 <l1+16>
+cpsr           0x60000010          1610612752
+fpscr          0x0                 0
+(gdb) s
+_start () at FuncStack2_Prog4_3.s:40
+40		bl	copy		@ call block transfer subroutine
+(gdb) 
+copy () at FuncStack2_Prog4_3.s:25
+25	copy:	ldr	r1, =a		@ r1 = ram address pointer (source)
+(gdb) s
+26		ldr	r2, =b		@ r2 = ram address pointer (destination)
+(gdb) s
+27		mov	r0, #10		@ counter
+(gdb) s
+l2 () at FuncStack2_Prog4_3.s:28
+28	l2:	ldr	r3, [r1]	@ get from ram1
+(gdb) s
+29		str	r3, [r2]	@ send it to ram2
+(gdb) s
+30		add	r1, r1, #4	@ r1 = r1 + 4 to increment pointer for ram1
+(gdb) 
+31		add	r2, r2, #4	@ r2 = r2 + 4 to increment pointer for ram2
+(gdb) 
+32		subs	r0, r0, #1	@ r0 = r0 – 1 for decrementing counter 
+(gdb) 
+33		bne	l2		@ keep doing it
+(gdb) 
+28	l2:	ldr	r3, [r1]	@ get from ram1
+(gdb) i r
+r0             0x9                 9
+r1             0x200dc             131292
+r2             0x20104             131332
+r3             0x55555555          1431655765
+r4             0x0                 0
+r5             0x0                 0
+r6             0x0                 0
+r7             0x0                 0
+r8             0x0                 0
+r9             0x0                 0
+r10            0x0                 0
+r11            0x0                 0
+r12            0x0                 0
+sp             0xfffef290          0xfffef290
+lr             0x100c4             65732
+pc             0x100a0             0x100a0 <l2>
+cpsr           0x20000010          536870928
+fpscr          0x0                 0
+(gdb) s
+29		str	r3, [r2]	@ send it to ram2
+(gdb) s
+30		add	r1, r1, #4	@ r1 = r1 + 4 to increment pointer for ram1
+(gdb) s
+31		add	r2, r2, #4	@ r2 = r2 + 4 to increment pointer for ram2
+(gdb) s
+32		subs	r0, r0, #1	@ r0 = r0 – 1 for decrementing counter 
+(gdb) s
+33		bne	l2		@ keep doing it
+(gdb) s
+28	l2:	ldr	r3, [r1]	@ get from ram1
+(gdb) i r
+r0             0x8                 8
+r1             0x200e0             131296
+r2             0x20108             131336
+r3             0x55555555          1431655765
+r4             0x0                 0
+r5             0x0                 0
+r6             0x0                 0
+r7             0x0                 0
+r8             0x0                 0
+r9             0x0                 0
+r10            0x0                 0
+r11            0x0                 0
+r12            0x0                 0
+sp             0xfffef290          0xfffef290
+lr             0x100c4             65732
+pc             0x100a0             0x100a0 <l2>
+cpsr           0x20000010          536870928
+fpscr          0x0                 0
+(gdb) s
+29		str	r3, [r2]	@ send it to ram2
+(gdb) s
+30		add	r1, r1, #4	@ r1 = r1 + 4 to increment pointer for ram1
+(gdb) s
+31		add	r2, r2, #4	@ r2 = r2 + 4 to increment pointer for ram2
+(gdb) s
+32		subs	r0, r0, #1	@ r0 = r0 – 1 for decrementing counter 
+(gdb) s
+33		bne	l2		@ keep doing it
+(gdb) i r
+r0             0x7                 7
+r1             0x200e4             131300
+r2             0x2010c             131340
+r3             0x55555555          1431655765
+r4             0x0                 0
+r5             0x0                 0
+r6             0x0                 0
+r7             0x0                 0
+r8             0x0                 0
+r9             0x0                 0
+r10            0x0                 0
+r11            0x0                 0
+r12            0x0                 0
+sp             0xfffef290          0xfffef290
+lr             0x100c4             65732
+pc             0x100b4             0x100b4 <l2+20>
+cpsr           0x20000010          536870928
+fpscr          0x0                 0
+(gdb) s
+28	l2:	ldr	r3, [r1]	@ get from ram1
+(gdb) s
+29		str	r3, [r2]	@ send it to ram2
+(gdb) s
+30		add	r1, r1, #4	@ r1 = r1 + 4 to increment pointer for ram1
+(gdb) s
+31		add	r2, r2, #4	@ r2 = r2 + 4 to increment pointer for ram2
+(gdb) s
+32		subs	r0, r0, #1	@ r0 = r0 – 1 for decrementing counter 
+(gdb) s
+33		bne	l2		@ keep doing it
+(gdb) s
+28	l2:	ldr	r3, [r1]	@ get from ram1
+(gdb) s
+29		str	r3, [r2]	@ send it to ram2
+(gdb) s
+30		add	r1, r1, #4	@ r1 = r1 + 4 to increment pointer for ram1
+(gdb) s
+31		add	r2, r2, #4	@ r2 = r2 + 4 to increment pointer for ram2
+(gdb) s
+32		subs	r0, r0, #1	@ r0 = r0 – 1 for decrementing counter 
+(gdb) s
+33		bne	l2		@ keep doing it
+(gdb) s
+28	l2:	ldr	r3, [r1]	@ get from ram1
+(gdb) s
+29		str	r3, [r2]	@ send it to ram2
+(gdb) s
+30		add	r1, r1, #4	@ r1 = r1 + 4 to increment pointer for ram1
+(gdb) s
+31		add	r2, r2, #4	@ r2 = r2 + 4 to increment pointer for ram2
+(gdb) s
+32		subs	r0, r0, #1	@ r0 = r0 – 1 for decrementing counter 
+(gdb) s
+33		bne	l2		@ keep doing it
+(gdb) s
+28	l2:	ldr	r3, [r1]	@ get from ram1
+(gdb) s
+29		str	r3, [r2]	@ send it to ram2
+(gdb) s
+30		add	r1, r1, #4	@ r1 = r1 + 4 to increment pointer for ram1
+(gdb) s
+31		add	r2, r2, #4	@ r2 = r2 + 4 to increment pointer for ram2
+(gdb) s
+32		subs	r0, r0, #1	@ r0 = r0 – 1 for decrementing counter 
+(gdb) s
+33		bne	l2		@ keep doing it
+(gdb) s
+28	l2:	ldr	r3, [r1]	@ get from ram1
+(gdb) s
+29		str	r3, [r2]	@ send it to ram2
+(gdb) s
+30		add	r1, r1, #4	@ r1 = r1 + 4 to increment pointer for ram1
+(gdb) s
+31		add	r2, r2, #4	@ r2 = r2 + 4 to increment pointer for ram2
+(gdb) s
+32		subs	r0, r0, #1	@ r0 = r0 – 1 for decrementing counter 
+(gdb) s
+33		bne	l2		@ keep doing it
+(gdb) s
+28	l2:	ldr	r3, [r1]	@ get from ram1
+(gdb) s
+29		str	r3, [r2]	@ send it to ram2
+(gdb) s
+30		add	r1, r1, #4	@ r1 = r1 + 4 to increment pointer for ram1
+(gdb) s
+31		add	r2, r2, #4	@ r2 = r2 + 4 to increment pointer for ram2
+(gdb) s
+32		subs	r0, r0, #1	@ r0 = r0 – 1 for decrementing counter 
+(gdb) s
+33		bne	l2		@ keep doing it
+(gdb) s
+28	l2:	ldr	r3, [r1]	@ get from ram1
+(gdb) s
+29		str	r3, [r2]	@ send it to ram2
+(gdb) s
+30		add	r1, r1, #4	@ r1 = r1 + 4 to increment pointer for ram1
+(gdb) s
+31		add	r2, r2, #4	@ r2 = r2 + 4 to increment pointer for ram2
+(gdb) s
+32		subs	r0, r0, #1	@ r0 = r0 – 1 for decrementing counter 
+(gdb) s
+33		bne	l2		@ keep doing it
+(gdb) s
+34		bx	lr		@ return to caller
+(gdb) s
+_start () at FuncStack2_Prog4_3.s:42
+42		mov 	r7, #1
+(gdb) i r
+r0             0x0                 0
+r1             0x20100             131328
+r2             0x20128             131368
+r3             0x55555555          1431655765
+r4             0x0                 0
+r5             0x0                 0
+r6             0x0                 0
+r7             0x0                 0
+r8             0x0                 0
+r9             0x0                 0
+r10            0x0                 0
+r11            0x0                 0
+r12            0x0                 0
+sp             0xfffef290          0xfffef290
+lr             0x100c4             65732
+pc             0x100c4             0x100c4 <_start+8>
+cpsr           0x60000010          1610612752
+fpscr          0x0                 0
+(gdb) s
+43		svc 	0
+(gdb) 

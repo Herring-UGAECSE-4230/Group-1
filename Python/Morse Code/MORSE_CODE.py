@@ -30,10 +30,10 @@ audio = audio.astype(np.int16) #audio to 16 bit format
 dictionary = {
     '-.-.-': 'ATTENTION', '-.-': 'OVER', '.-.-.': 'OUT',
     '.-': 'A', '-...': 'B', '-.-.': 'C', '-..': 'D', '.': 'E', '..-.': 'F', '--.': 'G', '....': 'H',
-    'I': '..', 'J': '.---', 'K': '-.-', 'L': '.-..', 'M': '--', 'N': '-.', 'O': '---', 'P': '.--.',
-    'Q': '--.-', 'R': '.-.', 'S': '...', 'T': '-', 'U': '..-', 'V': '...-', 'W': '.--', 'X': '-..-',
-    'Y': '-.--', 'Z': '--..', '0': '-----', '1': '.----', '2': '..---', '3': '...--', '4': '....-',
-    '5': '.....', '6': '-....', '7': '--...', '8': '---..', '9': '----.'
+    '..': 'I', '.---': 'J', '-.-': 'K', '.-..': 'L', '--': 'M', '-.': 'N', '---': 'O', '.--.': 'P',
+    '--.-': 'Q', '.-.': 'R', '...': 'S', '-': 'T', '..-': 'U', '...-': 'V', '.--': 'W', '-..-': 'X',
+    '-.--': 'Y', '--..': 'Z', '-----': '0', '.----': '1', '..---': '2', '...--': '3', '....-': '4',
+    '.....': '5', '-....': '6', '--...': '7', '---..': '8', '----.': '9'
 }
 
 def telegraph_input():
@@ -47,25 +47,16 @@ def telegraph_input():
     time.sleep(0.05)
 
 def convert(text):
-    morse_code = '' #reset morse code to empty
-    word = '' #used to account for words attention, over, out
-    for char in text.upper(): #uppercase for dictionary
-        if char == ' ' or char == '\n': #if at the end of a word
-            if word in dictionary: #once a word has been added, check if its in the dictionary
-                morse_code += dictionary[word] + " "
-            else:
-                for f in word: #if the word isnt in the dictionary, add each char of the word
-                    if f in dictionary:
-                        morse_code += dictionary[f] + " "
-            if char == '\n': # if the char added is a new line, add a new line to morse_code
-                morse_code += '\n'
-            if char == ' ': # if the char added is a new line, add a new line to morse_code
-                morse_code += '/'
-            word = ''
-        else: #occurs for words until a new line or space is reached
-            word += char
-    return morse_code.strip() #return and remove whitespace
-
+    english = '' #reset morse code to empty
+    letter = ''
+    for char in text: #uppercase for dictionary
+        while char != " " or char != "\n":
+            letter += char
+    english += dictionary[letter]
+    if char == "/":
+        engish += " "
+    elif char == "\n":
+        english += "\n"
 def convert_with_text(text):
     morse_code = '' #reset morse code to empty
     word = '' #used to account for words attention, over, out
@@ -110,13 +101,13 @@ def attention():
 
 #GPIO.add_event_detected(LED_PIN, GPIO.RISING, callback=telegraph_input(), bouncetime=50) #interrupt for key presses
 
-#input_file = r"/home/nnlm/Documents/Group-1/Python/Morse Code/input.txt" #File input locations in the form of r\"FILE_LOCATION"
-#output_file = r"/home/nnlm/Documents/Group-1/Python/Morse Code/output.txt" #File output locations in the form of r\"FILE_LOCATION"
+input_file = r"/home/nnlm/Documents/Group-1/Python/Morse Code/input.txt" #File input locations in the form of r\"FILE_LOCATION"
+output_file = r"/home/nnlm/Documents/Group-1/Python/Morse Code/output.txt" #File output locations in the form of r\"FILE_LOCATION"
 
 #speaker(convert(open(input_file, 'r').read()))
 
 #print("done")
 
-#open(output_file, 'w').write(convert_with_text(open(input_file, 'r').read())) 
-#input_file.close()
+open(output_file, 'w').write(convert(open(input_file, 'r').read())) 
+input_file.close()
 attention()

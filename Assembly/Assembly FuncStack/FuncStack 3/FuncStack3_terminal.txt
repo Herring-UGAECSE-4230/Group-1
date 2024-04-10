@@ -1,0 +1,149 @@
+Starting program: /home/nnlm/Documents/Group-1/Assembly/Assembly FuncStack/FuncStack 3/FuncStack3_ex6_18 
+
+Breakpoint 1, _start () at FuncStack3_ex6_18.s:9
+9		ldr	r0, =0x125		@ r0 = 0x125
+(gdb) 
+(gdb) s
+10		ldr	r1, =0x144		@ r1 = 0x144
+(gdb) 
+11		mov	r2, #0x56		@ r2 = 0x56
+(gdb) 
+12		bl	myFunc		@ call a subroutine
+(gdb) 
+myFunc () at FuncStack3_ex6_18.s:20
+20		str	r0, [r13, #-4]!	@ save r0 on stack
+(gdb) 
+21		str	r1, [r13, #-4]!	@ save r1 on stack
+(gdb) 
+22		str	r2, [r13, #-4]!	@ save r2 on stack
+(gdb) 
+25		mov	r0, #0	@ r0 = 0
+(gdb) 
+26		mov	r1, #0	@ r1 = 0
+(gdb) 
+27		mov	r2, #0	@ r2 = 0
+(gdb) 
+31		ldr	r2, [r13], #4	@ restore r2 from stack
+(gdb) 
+myFunc () at FuncStack3_ex6_18.s:32
+32		ldr	r1, [r13], #4	@ restore r1 from stack
+(gdb) 
+myFunc () at FuncStack3_ex6_18.s:33
+33		ldr	r0, [r13], #4	@ restore r0 from stack
+(gdb) 
+myFunc () at FuncStack3_ex6_18.s:35
+35		bx	lr			@ return to caller
+(gdb) 
+_start () at FuncStack3_ex6_18.s:13
+13		add	r3, r0, r1		@ r3 = r0 + r1 = 0x125 + 0x144 = 0x269
+(gdb) 
+14		add	r3, r3, r2		@ r3 = r3 + r2 = 0x269 + 0x56 = 0x2bf
+(gdb) 
+15		mov	r7, #1
+(gdb) 
+16		svc	0
+(gdb) i r
+r0             0x125               293
+r1             0x144               324
+r2             0x56                86
+r3             0x2bf               703
+r4             0x0                 0
+r5             0x0                 0
+r6             0x0                 0
+r7             0x1                 1
+r8             0x0                 0
+r9             0x0                 0
+r10            0x0                 0
+r11            0x0                 0
+r12            0x0                 0
+sp             0xfffef2a0          0xfffef2a0
+lr             0x10064             65636
+pc             0x10070             0x10070 <_start+28>
+cpsr           0x10                16
+fpscr          0x0                 0
+(gdb) 
+
+after modifications:
+        .text
+        .global _start 
+_start:
+        ldr     r0, =0x125              @ r0 = 0x125
+        ldr     r1, =0x144              @ r1 = 0x144
+        mov     r2, #0x56               @ r2 = 0x56
+        bl      myFunc          @ call a subroutine
+        add     r3, r0, r1              @ r3 = r0 + r1 = 0x125 + 0x144 = 0x269
+        add     r3, r3, r2              @ r3 = r3 + r2 = 0x269 + 0x56 = 0x2bf
+        mov     r7, #1
+        svc     0
+
+myFunc:
+        @ save r0, r1, and r2 on stack before they are used
+        push    {r0,r1,r2}
+    
+        @ -------- modify r0, r1, and r2
+        mov     r0, #0  @ r0 = 0
+        mov     r1, #0  @ r1 = 0
+        mov     r2, #0  @ r2 = 0
+        @ --------
+    
+        @ restore the original registers contents from stack
+        pop     {r0,r1,r2}
+
+        bx      lr                      @ return to caller
+
+
+
+
+
+Breakpoint 1, _start () at FuncStack3_ex6_18_modified.s:9
+9		ldr	r0, =0x125		@ r0 = 0x125
+(gdb) s
+10		ldr	r1, =0x144		@ r1 = 0x144
+(gdb) s
+11		mov	r2, #0x56		@ r2 = 0x56
+(gdb) s
+12		bl	myFunc		@ call a subroutine
+(gdb) s
+myFunc () at FuncStack3_ex6_18_modified.s:20
+20		push	{r0,r1,r2}
+(gdb) s
+23		mov	r0, #0	@ r0 = 0
+(gdb) s
+24		mov	r1, #0	@ r1 = 0
+(gdb) s
+25		mov	r2, #0	@ r2 = 0
+(gdb) s
+29		pop	{r0,r1,r2}
+(gdb) s
+myFunc () at FuncStack3_ex6_18_modified.s:31
+31		bx	lr			@ return to caller
+(gdb) s
+_start () at FuncStack3_ex6_18_modified.s:13
+13		add	r3, r0, r1		@ r3 = r0 + r1 = 0x125 + 0x144 = 0x269
+(gdb) 
+14		add	r3, r3, r2		@ r3 = r3 + r2 = 0x269 + 0x56 = 0x2bf
+(gdb) 
+15		mov	r7, #1
+(gdb) 
+16		svc	0
+(gdb) i r
+r0             0x125               293
+r1             0x144               324
+r2             0x56                86
+r3             0x2bf               703
+r4             0x0                 0
+r5             0x0                 0
+r6             0x0                 0
+r7             0x1                 1
+r8             0x0                 0
+r9             0x0                 0
+r10            0x0                 0
+r11            0x0                 0
+r12            0x0                 0
+sp             0xfffef2c0          0xfffef2c0
+lr             0x10064             65636
+pc             0x10070             0x10070 <_start+28>
+cpsr           0x10                16
+fpscr          0x0                 0
+(gdb) 
+
