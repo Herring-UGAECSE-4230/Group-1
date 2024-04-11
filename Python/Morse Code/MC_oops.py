@@ -42,6 +42,31 @@ dictionary = {
     '.....': '5', '-....': '6', '--...': '7', '---..': '8', '----.': '9', '\n': ''
 }
 
+def convert_with_text(text):
+    morse_code = '' #reset morse code to empty
+    word = '' #used to account for words attention, over, out
+    temp = ''
+    for char in text.upper(): #uppercase for dictionary
+        if char == ' ' or char == '\n': #if at the end of a word
+            if word in dictionary: #once a word has been added, check if its in the dictionary
+                morse_code += dictionary[word] + " | " + word.lower()
+            else:
+                for f in word: #if the word isnt in the dictionary, add each char of the word
+                    if f in dictionary:
+                        morse_code += dictionary[f] + " "
+                        temp += f
+            if char == '\n': # if the char added is a new line, add a new line to morse_code
+                if temp != '':
+                    morse_code += " | " + temp.lower()
+                    temp = ''
+                morse_code += '\n'
+            if char == ' ': # if the char added is a new line, add a new line to morse_code
+                morse_code += '/'
+            word = ''
+        else: #occurs for words until a new line or space is reached
+            word += char
+    return morse_code.strip() #return and remove whitespace
+
 #adds a dot to input and output
 def dot():
     global MC
@@ -97,13 +122,12 @@ def convert():
                 english += "ATTENTION"
             elif temp == "-.-" and flag == 1:
                 english += "OVER"
+            elif temp == ".-.-.":
+                english += "OUT"
                 open(output_file, 'w').write(english)
                 output_file.close()
                 input_file.close()
                 leave = True
-            elif temp == ".-.-.":
-                english += ""
-                #.-.-. -.-
             elif temp in dictionary:
                 english += dictionary[temp]
             else: 
