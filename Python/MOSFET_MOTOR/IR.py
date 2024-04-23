@@ -90,11 +90,12 @@ def calcRPM(): #interupt triggers this callback function
         rotations = bladenums / 3 #3 blades, so each rotation sees each blade once
         if timer == 20:
                 if inputSpeed < 4450: #Set RPM for low RPM values based on roations
-                        RPM = rotations*30
+                        RPM = rotations*35 - inputSpeed/450
                 else:
                       RPM = 4450+.0965*inputSpeed #correction factor for high RPM dips
                        
-                       
+                if RPM < 0:
+                       RPM = 0
                 print("Output RPM: ", RPM) #Print RPM to terminal
                 print("Input speed: ", inputSpeed) #Print input speed to terminal
                 timer = 0 #Reset timer after calculation
@@ -150,14 +151,19 @@ def oneup(num):
 
 #Function for registering input button press. Written by Nathan
 def Shadow_V2(): #button press enters callback function shadow realm from interrupt
-        global SW; global inputSpeed
+        global SW; global inputSpeed; global RPM
         print("") #Pauses output RPM and input speed
         time.sleep(0.8)
         pwm.ChangeDutyCycle(0) #stop rotation by setting PWM to 0
+        prev = RPM
+        RPM = 0
         while True:
+                print("Output RPM: ", RPM) #Print RPM to terminal
+                print("Input speed: ", inputSpeed) #Print input speed to terminal
                 if GPIO.input(SW) != 1: #ON button press, resume fan
                         time.sleep(0.8)
                         pwm.ChangeDutyCycle(int(dc)) #Set PWM back to the duty cycle value
+                        RPM = prev
                         break          
 
 #interrupts written by Dawson
