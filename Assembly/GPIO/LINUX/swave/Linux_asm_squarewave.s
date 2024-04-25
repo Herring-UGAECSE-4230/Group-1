@@ -39,6 +39,7 @@ device:
     .text
     .global main
 main:
+
 @ Open /dev/gpiomem for read/write and syncing
     ldr     r1, O_RDWR_O_SYNC   @ flags for accessing device
     ldr     r0, mem_fd          @ address of /dev/gpiomem
@@ -63,8 +64,49 @@ main:
     bic     r2, r2, #GPFSEL1_GPIO17_MASK@ clear pin field
     orr     r2, r2, #MAKE_GPIO17_OUTPUT @ enter function code
     str     r2, [r0]                    @ update register
-    
 
+    PUSH {r3,r5}
+@the code below calculates a tenth of ON and OFF delay and subtracts this from ON and OFF delay
+#a set of instructions designated to convert the On and Off times into formats suitable for the delay loops
+calc1:
+	ldr r3, =ON_TIME #set r3 to have ON_TIME value
+	ldr r4, =#312500  #set r4 to have 312500 which is the denominator in the ratio between 3200 and 1000000000
+	mov r5, #0 # initialize updated ON_TIME register
+	mov r6, #0 # initialize updated OFF_TIME register
+inner1:
+# subtracts r4 from r3 until a zero is reached or r3 is less than r4. r5 is incremented accordingly
+	subs r3, r3, r4 
+  beq extra1
+	cmp r3,r4
+	blt calc2
+	add r5, r5, #1
+	b inner1
+calc2:
+# this is the same procedure as before, but with OFF_TIME
+	ldr r3, =OFF_TIME
+inner2:
+	subs r3, r3, r4
+	beq extra2
+	cmp r3, r4
+	blt continue
+	add r6, r6, #1
+	b inner2 
+
+ # these are instructions to increment r5 or r6 once more if subtracting r4 from r3 yields a 0
+extra1:
+	add r5, r5, #1
+	b calc2
+extra2: 
+	add r6, r6, #1
+	b continue
+ @this code subtracts the tenth from ON_DELAY and OFF_DELAY and stores each in r4 and r6 respectively
+ continue:
+ ldr r1, =ON_DELAY
+ sub r4, r1,r5
+ ldr r1, =OFF_DELAY
+ sub r6, r1, r6
+    
+POP{r3,r5}
 loop:
 
 @ Turn on
@@ -93,7 +135,7 @@ loop:
   b loop
 
 delay1:
-  ldr r0, =ON_DELAY
+  mov r0, r4
 lp1:
   subs r0,#1
   bne lp1
@@ -101,7 +143,7 @@ lp1:
 
 
 delay2:
-  ldr r0, =OFF_DELAY
+  mov r0, r6
 lp2:
   subs r0,#1
   bne lp2
