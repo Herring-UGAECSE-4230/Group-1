@@ -26,6 +26,9 @@ main:
 
     vmov.f32 s1, #1.0      @ Initialize result to 1 (for 0! case)
     vmov.f32 s4, #1.0      @ Load 1.0 into s4 for decrementing loop
+    vmov.f32 s0, s5        @ Initialize s0 as a copy of original n for looping
+
+    @ Convert and check if n == 0
     vcvt.s32.f32 s2, s0    @ Convert n to integer in s2
     vmov r3, s2            @ Move integer n from s2 to r3 for comparison
     cmp r3, #0             @ Check if input n is zero
