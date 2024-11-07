@@ -16,16 +16,19 @@ main:
     @ Load input value
     ldr r1, =int           @ Load input address
     vldr s0, [r1]          @ Load input value into s0
+    vmov.f32 s5, s0        @ Store original input value in s5 for printing
 
     @ Display "n! = ..." by printing `n` before calculating factorial
-    vcvt.s32.f32 s2, s0    @ Convert input to integer in s2
+    vcvt.s32.f32 s2, s5    @ Convert original input to integer in s2
     vmov r1, s2            @ Move integer n from s2 to r1 for printf
     ldr r0, =numPart       @ Load format for integer part of output
     bl printf              @ Print "n"
 
     vmov.f32 s1, #1.0      @ Initialize result to 1 (for 0! case)
     vmov.f32 s4, #1.0      @ Load 1.0 into s4 for decrementing loop
-    cmp r1, #0             @ Check if input n is zero
+    vcvt.s32.f32 s2, s0    @ Convert n to integer in s2
+    vmov r3, s2            @ Move integer n from s2 to r3 for comparison
+    cmp r3, #0             @ Check if input n is zero
     beq print_result       @ If input is zero, skip to print result as 1
 
     @ FACTORIAL LOOP for n > 0
