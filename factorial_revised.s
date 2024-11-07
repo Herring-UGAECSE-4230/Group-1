@@ -4,7 +4,7 @@
 main:
     PUSH {LR}
 
-    @ PRINT
+    @ PRINT INITIAL MESSAGE
     ldr r0, =display       @ Setup printf for initial message
     bl printf              @ Print "Enter n!: "
 
@@ -17,12 +17,16 @@ main:
     ldr r1, =int           @ Load input address
     vldr s0, [r1]          @ Load input value into s0
 
-    vmov.f32 s1, #1.0      @ Initialize result to 1 (in case of 0!)
-    vmov.f32 s4, #1.0      @ Load 1.0 into s4 for subtraction
+    @ Display "n! = ..." by printing `n` before calculating factorial
     vcvt.s32.f32 s2, s0    @ Convert input to integer in s2
-    vmov r3, s2            @ Move integer input from s2 to r3 for comparison
-    cmp r3, #0             @ Check if input is zero
-    beq print_result       @ If input is zero, skip to print result
+    vmov r1, s2            @ Move integer n from s2 to r1 for printf
+    ldr r0, =numPart       @ Load format for integer part of output
+    bl printf              @ Print "n"
+
+    vmov.f32 s1, #1.0      @ Initialize result to 1 (for 0! case)
+    vmov.f32 s4, #1.0      @ Load 1.0 into s4 for decrementing loop
+    cmp r1, #0             @ Check if input n is zero
+    beq print_result       @ If input is zero, skip to print result as 1
 
     @ FACTORIAL LOOP for n > 0
 factorial:
@@ -35,7 +39,7 @@ factorial:
 
 print_result:
     vcvt.f64.f32 d0, s1    @ Convert result to double for printf
-    ldr r0, =answer
+    ldr r0, =answer        @ Load format for final result
     vmov r1, r2, d0        @ Move result into printf arguments
     bl printf
 
@@ -45,8 +49,7 @@ print_result:
 .data
 display: .asciz "Enter n!: "
 .align 4
-answer: .asciz "! = %f\n"
-
+answer: .asciz "! = %f\n"   @ Answer format with factorial result
 int:    .word 0             @ Storage for input
 float:  .asciz "%f"         @ Format for scanf
-numPart: .asciz "%.0f"      @ Format for integer display
+numPart: .asciz "%.0f"      @ Format to print integer n before "!"
